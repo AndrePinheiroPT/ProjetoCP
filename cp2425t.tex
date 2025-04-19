@@ -269,10 +269,10 @@
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\group{G15}
+\studentA{108473}{André Filipe Dourado Pinheiro}
+\studentB{105532}{Killian Alexandre Ferreira Oliveira}
+\studentC{108398}{Pedro Dong Mo}
 
 %==============================================================================%
 
@@ -522,7 +522,6 @@ tirados de \cite{Ol05}.}
 \ensuremath{\begin{lcbr}\p1\mathrel{=}\Varid{f}\\\p2\mathrel{=}\Varid{g}\end{lcbr}}
 \qed
 \end{eqnarray*}
-
 Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por exemplo:
 \begin{eqnarray*}
 \xymatrix@C=2cm{
@@ -647,12 +646,110 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista de candidatos para a resposta e um catamorfismo para obter o maior desses candidatos.
+
+Sejam $l$ uma lista não vazia de naturais. O primeiro candidato é dado por
+\[\text{min}(\text{head } l, \text{last } l) \times (\text{length } l - 1)\]
+
+Para escolhermos o próximo candidato, temos dois casos:
+\begin{enumerate}
+	\item Se $\text{head } l \geq \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+
+	\item Se $\text{head } l < \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+\end{enumerate}
+
+Além disso, podemos observar que reverter a lista é irrelevante para o resultado final. Portanto, podemos escrever a seguinte definição recursiva.
+
+\begin{eqnarray*}
+\start
+\ensuremath{\begin{lcbr}\Varid{g}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{g}\;\Varid{l}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\;\Varid{l}\end{lcbr}}
+\end{eqnarray*}
+
+onde:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{mostwater}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{geq}\mathrel{=}\uncurry{(\geq )}{}\<[E]%
+\\
+\>[B]{}\Varid{len}\mathrel{=}\Varid{fromIntegral}\comp \length {}\<[E]%
+\\
+\>[B]{}\Varid{f}\mathrel{=}\conj{\Varid{mul}\comp (\Varid{id}\times\Varid{len})}{\p2}\comp (\Varid{head}\times\Varid{tail})\comp \Varid{diag}\comp (\mcond{\Varid{geq}\comp (\Varid{head}\times\Varid{last})\comp \Varid{diag}}{\Varid{reverse}}{\Varid{id}}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+Portanto temos,
+\begin{eqnarray*}
+\start
+\ensuremath{\begin{lcbr}\Varid{g}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{g}\;\Varid{l}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\;\Varid{l}\end{lcbr}}
+\just\equiv{ definição pointwise }
+\ensuremath{\begin{lcbr}\Varid{g}\comp \Varid{nil}\mathrel{=}\mathbf{in}\;\\\Varid{g}\comp \Varid{id}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\end{lcbr}}
+\just\equiv{ definição de in, Eq-+ }
+\ensuremath{\Varid{g}\comp \mathsf{in}_{id}\mathrel{=}\alt{\;\mathbf{in}\;}{\;\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}}}
+\just\equiv{ (33), Fusão-+ }
+\ensuremath{\Varid{g}\mathrel{=}\mathbf{in}\comp \alt{\Varid{id}}{(\Varid{id}\times\Varid{g})\comp \Varid{f}}\comp \mathsf{out}_{id}}
+\just\equiv{ Absorção-+ }
+\ensuremath{\Varid{g}\mathrel{=}\mathbf{in}\comp \alt{\Varid{id}}{\Varid{id}\times\Varid{g}}\comp (\Varid{id}\mathbin{+}\Varid{f})\comp \mathsf{out}_{id}}
+\just\equiv{ Universal-ana }
+\ensuremath{\Varid{g}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\Varid{f})\comp \mathsf{out}_{id}}}
+\qed
+\end{eqnarray*}
+
+Além disso, já vimos nas aulas que o catamorfismo de listas
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{h}\mathrel{=}\llparenthesis\, \alt{\Varid{zero}}{\Varid{umax}}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+obtém o valor máximo numa lista de naturais.
+
+Portanto, temos
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \alt{\Varid{zero}}{\Varid{umax}},\,(\Varid{id}+\Varid{f})\comp \mathsf{out}_{id}\,\rrbracket{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+onde:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathsf{out}_{id}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[B]{}\mathsf{out}_{id}\;(\Varid{h}\mathbin{:}\Varid{t})\mathrel{=}i_2\;(\Varid{h}\mathbin{:}\Varid{t}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+Ilustrado pelo seguinte diagrama:
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{[\mskip1.5mu \N_0\mskip1.5mu]}
+           \ar[d]_-{\ensuremath{\ana{\Varid{g}}}}
+           \ar[r]_-{\ensuremath{\mathsf{out}_{id}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}[\mskip1.5mu \N_0\mskip1.5mu]}
+           \ar[r]_-{\ensuremath{\Varid{id}\mathbin{+}\Varid{f}}}
+& 
+	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times[\mskip1.5mu \N_0\mskip1.5mu]}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\ana{\Varid{g}}}}
+\\
+     \ensuremath{[\mskip1.5mu \N_0\mskip1.5mu]}
+           \ar[d]_-{\ensuremath{\llparenthesis\, \Varid{h}\,\rrparenthesis}}
+& &
+     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times[\mskip1.5mu \N_0\mskip1.5mu]}
+           \ar[ll]^-{\ensuremath{\mathbf{in}}}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{h}}}
+\\
+     \ensuremath{\N_0}
+& &
+     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times\N_0}
+           \ar[ll]^-{\ensuremath{\alt{\Varid{zero}}{\Varid{umax}}}}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 2}
 

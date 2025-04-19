@@ -126,16 +126,18 @@
 %format test1 = "test_{1} "	
 %format test2a = "test_{2a} "	
 %format test2b = "test_{2b} "	
-%format test2c = "test_{2c} "	
+%format test2c = "test_{2c} "
+%format outid = "\mathsf{out}_{id}"	
+%format inid = "\mathsf{in}_{id}"	
 %------------------------------------------------------------------------------%
 
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\group{G15}
+\studentA{108473}{André Filipe Dourado Pinheiro}
+\studentB{105532}{Killian Alexandre Ferreira Oliveira}
+\studentC{108398}{Pedro Dong Mo}
 
 %==============================================================================%
 
@@ -412,7 +414,6 @@ tirados de \cite{Ol05}.}
 |
 \qed
 \end{eqnarray*}
-
 Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por exemplo:
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
@@ -500,9 +501,121 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista de candidatos para a resposta e um catamorfismo para obter o maior desses candidatos.
+
+Sejam $l$ uma lista não vazia de naturais. O primeiro candidato é dado por
+\[\text{min}(\text{head } l, \text{last } l) \times (\text{length } l - 1)\]
+
+Para escolhermos o próximo candidato, temos dois casos:
+\begin{enumerate}
+	\item Se $\text{head } l \geq \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+
+	\item Se $\text{head } l < \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+\end{enumerate}
+
+Além disso, podemos observar que reverter a lista é irrelevante para o resultado final. Portanto, podemos escrever a seguinte definição recursiva.
+
+\begin{eqnarray*}
+\start
+|
+	 lcbr(
+          g [] = []
+     )(
+          g l =  in.(id >< g).f l
+     )
+|
+\end{eqnarray*}
+
+onde:
 \begin{code}
-mostwater = undefined
+geq = uncurry (>=)
+len = fromIntegral.length
+f = (split (mul.(id><len)) snd).(head >< tail).diag.((Cp.cond (geq.(head >< last).diag) reverse id))
 \end{code}
+
+Portanto temos,
+\begin{eqnarray*}
+\start
+|
+	 lcbr(
+          g [] = []
+     )(
+          g l =  in.(id >< g).f l
+     )
+|
+\just\equiv{ definição pointwise }
+|
+	 lcbr(
+          g.nil = in 
+     )(
+          g.id =  in.(id >< g).f 
+     )
+|
+\just\equiv{ definição de in, Eq-+ }
+|
+	g . inid = either (in) (in.(id >< g).f)
+|
+\just\equiv{ (33), Fusão-+ }
+|
+	g = in.(either id ((id >< g).f)).outid
+|
+\just\equiv{ Absorção-+ }
+|
+	g = in.(either id (id >< g)).(id + f).outid
+|
+\just\equiv{ Universal-ana }
+|
+	g = ana ((id+f).outid)
+|
+\qed
+\end{eqnarray*}
+
+Além disso, já vimos nas aulas que o catamorfismo de listas
+
+\begin{code}
+h = cata (either zero umax)
+\end{code}
+
+obtém o valor máximo numa lista de naturais.
+
+Portanto, temos
+
+\begin{code}
+mostwater = hylo (either zero umax) ((id -|- f).outid)
+\end{code}
+onde:
+\begin{code}
+outid [] = i1 () 
+outid (h:t) = i2 (h:t)
+\end{code}
+
+Ilustrado pelo seguinte diagrama:
+
+\begin{eqnarray*}
+\xymatrix{
+    |[Nat0]|
+           \ar[d]_-{|ana g|}
+           \ar[r]_-{|outid|}
+&
+    |1 + [Nat0]|
+           \ar[r]_-{|id + f|}
+& 
+	|1 + Nat0 >< [Nat0]|
+           \ar[d]^{|id + id >< ana g|}
+\\
+     |[Nat0]|
+           \ar[d]_-{|cata h|}
+& &
+     |1+Nat0 >< [Nat0]|
+           \ar[ll]^-{|in|}
+           \ar[d]^-{|id + id >< h|}
+\\
+     |Nat0|
+& &
+     |1+Nat0 >< Nat0|
+           \ar[ll]^-{|either zero umax|}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 2}
 
