@@ -248,14 +248,10 @@ combinadores que a isso acrescentem |filter|, por forma a selecionar que
 etapas da computação geram ou não \emph{outputs} --- obtendo-se assim o efeito
 \emph{'many-to-one'}. Ter-se-á, para esse efeito:
 
-% \begin{code}
-% mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
-% mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
-% \end{code}
-
-|mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
-
-|mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
+\begin{code}
+mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
+mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
+\end{code}
 
 Pretendem-se as implementações de |mapAccumRfilter| e |mapAccumLfilter| sob a forma de ana / cata ou hilomorfismos em \Haskell, acompanhadas por diagramas.
 
