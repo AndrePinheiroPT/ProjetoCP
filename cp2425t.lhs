@@ -60,6 +60,8 @@
 %format (cata (f)) = "\llparenthesis\, " f "\,\rrparenthesis"
 %format (cataNat (g)) = "\cataNat{" g "}"
 %format (cataList (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
+%format (cataListAcc (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
+%format (cataListAcc' (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
 %format (cataLTree (x)) = "\llparenthesis\, " x "\,\rrparenthesis"
 %format (cataFTree (x)) = "\llparenthesis\, " x "\,\rrparenthesis"
 %format (cataRose (x)) = "\llparenthesis\, " x "\,\rrparenthesis_\textit{\tiny R}"
@@ -246,10 +248,14 @@ combinadores que a isso acrescentem |filter|, por forma a selecionar que
 etapas da computação geram ou não \emph{outputs} --- obtendo-se assim o efeito
 \emph{'many-to-one'}. Ter-se-á, para esse efeito:
 
-\begin{code}
-mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
-mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
-\end{code}
+% \begin{code}
+% mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
+% mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
+% \end{code}
+
+|mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
+
+|mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
 
 Pretendem-se as implementações de |mapAccumRfilter| e |mapAccumLfilter| sob a forma de ana / cata ou hilomorfismos em \Haskell, acompanhadas por diagramas.
 
@@ -506,10 +512,215 @@ mostwater = undefined
 
 \subsection*{Problema 2}
 
-\begin{code}
-mapAccumRfilter p f = undefined
+Para este problema, iremos primeiro definir o mapAccumR, mapAccumL e o filter com catamorfismos.
 
-mapAccumLfilter p f = undefined
+|myMapAccumR :: ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
+
+\noindent
+e seja:
+\begin{code}
+outListAcc ([], s)    = i1 ((), s)
+outListAcc ((a:x), s) = i2 (a,(x,s))
+cataListAcc g = g . recList (cataListAcc g) . outListAcc
+\end{code}
+O que resulta neste diagrama:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Seq (A) >< S|
+           \ar[d]_-{|myMapAccumR f|}
+           \ar[r]_-{|outListAcc|}
+&
+    |(1 >< S) + A >< (Seq (A) >< S)|
+           \ar[d]^{|id + id >< (myMapAccumR f)|}
+\\
+     |Seq (C) >< S|
+&
+     |(1 >< S) + A >< (Seq (C) >< S)|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+Falta apenas definir o gene deste catamorfismo.
+
+myMapAccumR f = |cataListAcc (either myMapAccumR1 (myMapAccumR2 f))|
+
+Seja o diagrama do |myMapAccumR1|:
+\begin{eqnarray*}
+\xymatrix@@C=3cm{
+     |1 >< S|
+           \ar[r]^-{|myMapAccumR1|}
+&
+     |Seq (C) >< S|
+}
+\end{eqnarray*}
+O caso base do |mapAccumR f ([],n) = ([],n)|, logo
+\begin{code}
+myMapAccumR1 = nil >< id
+\end{code}
+Para o |myMapAccumR2 f|, iremos resolver passo a passo 
+como está no diagrama a seguir
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+&
+     |A >< (Seq (C) >< S)|
+           \ar[dl]_-{|id >< p2|}
+           \ar[dd]_-{|split (f . (id >< p2)) (p1 . p2)|}
+           \ar[ddr]^-{|p1 . p2|} 
+\\
+     |A >< S|
+           \ar[d]_-{|f|}
+\\
+     |C >< S|
+&
+     |(C >< S) >< Seq (C)|
+           \ar[l]^-{|p1|}
+           \ar[d]_-{|zed = split (split (p1 . p1) p2) (p2 . p1)|}
+           \ar[r]_-{|p2|}
+&
+     |Seq (C)|
+\\ &
+     |(C >< Seq (C)) >< S|
+           \ar[d]_-{|cons >< id|}
+\\ &
+     |Seq (C) >< S|
+}
+\end{eqnarray*}
+assim:
+\begin{code}
+zed = split (split (p1 . p1) p2) (p2 . p1)
+myMapAccumR2 f = (cons >< id) . zed . split (f . (id >< p2)) (p1 . p2)
+\end{code}
+e tambem podemos definir |zed| como |zed = assocl . (id >< swap) . assocr|.
+
+\noindent
+Com isto, resulta:
+\begin{code}
+myMapAccumR f = cataListAcc (either myMapAccumR1 (myMapAccumR2 f))
+\end{code}
+E segue-se o diagrama do filter e o seu catamorfismo:
+\begin{eqnarray*}
+\xymatrix@@C=4cm{
+    |Seq (A)|
+           \ar[d]_-{|mapFilter p|}
+           \ar[r]^-{|outList|}
+&
+    |1 + A >< Seq(A)|
+           \ar[d]^{|id + (mapFilter p)|}
+\\
+     |Seq(A)|
+&
+     |1 + A >< Seq(A)|
+           \ar[l]^-{|either nil (cond (p . p1) cons p2)|}
+}
+\end{eqnarray*}
+\begin{code}
+myfilter p = cataList (either nil (cond (p . p1) cons p2))
+\end{code}
+E fazer o mapAccumL é análogo, trocando o funtor assim:
+\begin{code}
+outListAcc' ([], s) = i1 ((), s)
+outListAcc' (x, s)  = i2 (last x, (init x, s))
+cataListAcc' g = g . recList (cataListAcc' g) . outListAcc'
+
+addToLast = uncurry (flip (++) . (singleton))
+
+myMapAccumL1 = nil >< id
+myMapAccumL2 f = (addToLast >< id) . zed . split (f . (id >< p2)) (p1 . p2)
+
+myMapAccumL f = cataListAcc' (either myMapAccumL1 (myMapAccumL2 f))
+\end{code}
+como estamos começar pelo fim, então também temos de começar a adicionar os
+elementos pelo fim.
+
+\newpage
+\noindent
+Agora podemos definir |filtermapAccumR| e |filtermapAccumL|
+inspirado com as funções anteriores
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Seq (A) >< S|
+           \ar[d]_-{|mapAccumRfilter f p|}
+           \ar[r]_-{|outListAcc|}
+&
+    |(1 >< S) + A >< (Seq (A) >< S)|
+           \ar[d]^{|id + id >< (mapAccumRfilter f p)|}
+\\
+     |Seq (C) >< S|
+&
+     |(1 >< S) + A >< (Seq (C) >< S)|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+
+|mapAccumRfilter p f = either mapAccumRfilter1 (mapAccumRfilter2 p f)|
+\begin{code}
+mapAccumRfilter1 = nil >< id
+\end{code}
+
+
+e se detalhar mais o diagrama do filter |cond p f g = (either f g) . (grd p)|:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |1|
+           \ar[r]^-{|i1|}
+           \ar[dr]_-{|nil|}
+&
+     |1 + A >< Seq(A)|
+           \ar[d]^-{|either nil ((either cons p2) . (grd (p . p1)))|}
+&
+     |A >< Seq(A)|
+           \ar[l]_-{|i2|}
+           \ar[d]^-{|grd (p . p1)|}
+\\  & 
+     |Seq (A)|
+&
+     |A >< Seq(A) + A >< Seq(A)|
+          \ar[l]^-{|either cons p2|}
+}
+\end{eqnarray*}
+Podemos ver que a estrutura recursiva do filter é 
+|A >< Seq(A) + A >< Seq(A)|, 
+e se aplicarmos esta estrutura no nosso diagrama do mapAccumR2 obtemos o mapAccumRfilter2:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |A >< (Seq (C) >< S)|
+           \ar[d]_-{|id >< swap|}
+\\
+     |A >< (S >< Seq (C))|
+           \ar[d]_-{|assocl|}
+\\
+     |(A >< S) >< Seq(C)|
+           \ar[d]_-{|grd (p . p1)|}
+\\
+     |((A >< S) >< Seq(C)) + ((A >< S) >< Seq(C))|
+           \ar[d]_-{|(f >< id) + (f >< id)|}
+\\
+     |((C >< S) >< Seq(C)) + ((C >< S) >< Seq(C))|
+           \ar[d]_-{|either ((cons >< id) . zed) (swap . (p2 >< id))|}
+\\
+     |(C >< S) >< Seq(C)|
+}
+\end{eqnarray*}
+o que resulta
+
+\begin{code}
+mapAccumRfilter2 p f =
+     (either ((cons >< id) . zed) (swap . (p2 >< id))) . ((f >< id) -|- (f >< id)) . (grd (p . p1)) . assocl . (id >< swap)
+mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))
+\end{code}
+
+\noindent
+e podemos ver que, |either ((cons >< id) . zed) (swap . (p2 >< id))| 
+e |either cons p2| são similares.
+
+\noindent
+Análogamente podemos fazer o |mapAccumLfilter|, com o mesmo funtor do
+|myMapAccumL|
+
+\begin{code}
+mapAccumLfilter1 = nil >< id
+mapAccumLfilter2 p f = 
+     (either ((addToLast >< id) . zed) (swap . (p2 >< id))) . ((f >< id) -|- (f >< id)) . (grd (p . p1)) . assocl . (id >< swap)
+mapAccumLfilter p f = cataListAcc' (either mapAccumLfilter1 (mapAccumLfilter2 p f))
 \end{code}
 
 %----------------- Índice remissivo (exige makeindex) -------------------------%
