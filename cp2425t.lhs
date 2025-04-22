@@ -585,7 +585,8 @@ assim:
 zed = split (split (p1 . p1) p2) (p2 . p1)
 myMapAccumR2 f = (cons >< id) . zed . split (f . (id >< p2)) (p1 . p2)
 \end{code}
-e tambem podemos definir |zed| como |zed = assocl . (id >< swap) . assocr|.
+e tambem podemos definir |zed| como |zed = assocl . (id >< swap) . assocr| e
+|split (f . (id >< p2)) (p1 . p2)| como |(f >< id) . assocl . (id >< swap)|
 
 \noindent
 Com isto, resulta:
@@ -629,16 +630,16 @@ elementos pelo fim.
 
 \newpage
 \noindent
-Agora podemos definir |filtermapAccumR| e |filtermapAccumL|
-inspirado com as funções anteriores
+Agora podemos definir |mapAccumRfilter| e |mapAccumLfilter|
+inspirado nas as funções anteriores
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
     |Seq (A) >< S|
-           \ar[d]_-{|mapAccumRfilter f p|}
+           \ar[d]_-{|mapAccumRfilter p f|}
            \ar[r]_-{|outListAcc|}
 &
     |(1 >< S) + A >< (Seq (A) >< S)|
-           \ar[d]^{|id + id >< (mapAccumRfilter f p)|}
+           \ar[d]^{|id + id >< (mapAccumRfilter p f)|}
 \\
      |Seq (C) >< S|
 &
@@ -647,8 +648,8 @@ inspirado com as funções anteriores
 }
 \end{eqnarray*}
 
-|mapAccumRfilter p f = either mapAccumRfilter1 (mapAccumRfilter2 p f)|
 \begin{code}
+mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))
 mapAccumRfilter1 = nil >< id
 \end{code}
 
