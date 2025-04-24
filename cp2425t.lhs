@@ -647,9 +647,9 @@ inspirado nas as funções anteriores
            \ar[l]^-{|g|}
 }
 \end{eqnarray*}
+|mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))|
 
 \begin{code}
-mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))
 mapAccumRfilter1 = nil >< id
 \end{code}
 
