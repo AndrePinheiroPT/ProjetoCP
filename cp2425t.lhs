@@ -126,18 +126,25 @@
 %format test1 = "test_{1} "	
 %format test2a = "test_{2a} "	
 %format test2b = "test_{2b} "	
-%format test2c = "test_{2c} "
-%format outid = "\mathsf{out}_{id}"	
-%format inid = "\mathsf{in}_{id}"	
+%format test2c = "test_{2c} "	
+%format picalc = "\pi_{\mathit{calc}}"	
+%format piloop = "\pi_{\mathit{loop}}"	
+%format (List.fac (n)) = n " ! "
+%format X1 = "X_1 "	
+%format X2 = "X_2 "	
+%format X3 = "X_3 "	
+%format .! = "\mathbin{\bullet}"
+%format `ominus` = "\mathbin{\ominus}"
+%format (ominus (n)(m)) = "{" n "}\ominus{" m "}"
+%format (negb (a))  = "\overline{ " a "}"
 %------------------------------------------------------------------------------%
-
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G15}
-\studentA{108473}{André Filipe Dourado Pinheiro}
-\studentB{105532}{Killian Alexandre Ferreira Oliveira}
-\studentC{108398}{Pedro Dong Mo}
+\group{G99}
+\studentA{xxxxxx}{Nome }
+\studentB{xxxxxx}{Nome }
+\studentC{xxxxxx}{Nome }
 
 %==============================================================================%
 
@@ -154,11 +161,11 @@
 
 \section*{Preâmbulo}
 
-Na UC de \CP\ pretende-se ensinar a progra\-mação de computadores como uma
-disciplina científica. Para isso parte-se de um repertório de \emph{combinadores}
-que formam uma álgebra da programação (conjunto de leis universais e seus
-corolários) e usam-se esses combinadores para construir programas
-\emph{composicionalmente}, isto é, agregando programas já existentes.
+Na UC de \CP\ pretende-se ensinar a progra\-mação de computadores como uma disciplina
+científica. Para isso parte-se de um repertório de \emph{combinadores} que
+formam uma álgebra da programação % (conjunto de leis universais e seus corolários)
+e usam-se esses combinadores para construir programas \emph{composicionalmente},
+isto é, agregando programas já existentes.
 
 Na sequência pedagógica dos planos de estudo dos cursos que têm esta disciplina,
 opta-se pela aplicação deste método à programação em \Haskell\ (sem prejuízo
@@ -180,13 +187,14 @@ e elegantes que utilizem os combinadores de ordem superior estudados na discipli
 {-# LANGUAGE GeneralizedNewtypeDeriving, DeriveDataTypeable, FlexibleInstances #-}
 module Main where
 import Cp
-import List hiding (fac,odds)
+import List hiding (odds)
 import Nat hiding (aux)
 import LTree hiding (alpha)
 import FTree
 import Exp
 -- import Probability
 import Data.List hiding (find,transpose)
+-- import Svg hiding (for,dup,fdiv)
 import Control.Monad
 import Control.Applicative hiding ((<|>))
 import System.Process
@@ -205,7 +213,8 @@ seguinte:
 
 	\histogramaA \label{fig:histogramaA}
 
-\noindent A figura mostra a sequência de números
+\noindent
+A figura mostra a sequência de números
 \begin{code}
 hghts = [1,8,6,2,5,4,8,3,7]
 \end{code}
@@ -219,15 +228,14 @@ função em \Haskell
 \begin{code}
 mostwater :: [Int] -> Int
 \end{code}
-que deverá dar essa área.
-(No exemplo acima tem-se |mostwater [1,8,6,2,5,4,8,3,7] = 49|.)
+que deverá dar essa área. (No exemplo acima tem-se |mostwater [1,8,6,2,5,4,8,3,7] = 49|.)
 A resolução desta questão deverá ser acompanhada de diagramas elucidativos.
 
 \Problema
 
 Um dos problemas prementes da Computação na actualidade é conseguir, por
-engenharia reversa, interpretar as redes neuronais (\NN{RN}) geradas
-artificialmente sob a forma de algoritmos compreensíveis por humanos.
+engenharia reversa, interpretar as redes neuronais (\NN{RN}) geradas artificialmente
+sob a forma de algoritmos compreensíveis por humanos.
 
 Já foram dados passos que, nesse sentido, explicam vários padrões de \NN{RN}s
 em termos de combinadores funcionais \cite{Co15}. Em particular, já se mostrou
@@ -253,25 +261,104 @@ mapAccumRfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
 mapAccumLfilter :: ((a,s) -> Bool) -> ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)
 \end{code}
 
-Pretendem-se as implementações de |mapAccumRfilter| e |mapAccumLfilter| sob a forma de ana / cata ou hilomorfismos em \Haskell, acompanhadas por diagramas.
+Pretende-se a implementação de |mapAccumRfilter| e |mapAccumLfilter| sob a forma de ana / cata ou hilomorfismos em \Haskell, acompanhadas por diagramas.
 
 Como caso de uso, sugere-se o que se dá no anexo \ref{sec:karpathy} que, inspirado em \cite{Ka15}, recorre à biblioteca \DataMatrix.
 
 \Problema
 
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+Umas das fórmulas conhecidas para calcular o número |pi| é a que se segue,
+\begin{eqnarray}
+	|pi| = \sum_{n=0}^\infty \frac{(n!)^2 {2^{n+1}}}{(2n+1)!}
+	\label{eq:pi}
+\end{eqnarray}
+correspondente à função |picalc| cuja implementação em Haskell, paramétrica em |n|, é dada no anexo \ref{sec:codigo}.
 
-\Problema
-
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+Pretende-se uma implementação eficiente de (\ref{eq:pi}) que, derivada por recursividade mútua,
+não calcule factoriais nenhuns:
+\begin{spec}
+piloop = cdots . for loop inic where cdots
+\end{spec}
+\textbf{Sugestão}: recomenda-se a \textbf{regra prática} que se dá no anexo \ref{sec:mr}
+para problemas deste género, que podem envolver várias decomposições por recursividade
+mútua em |Nat0|.
 
 \RNNs
 
-\newpage
+\Problema
+Considere-se a matriz e o vector que se seguem:
+\begin{eqnarray}
+mat&=&\begin{bmatrix}
+      1 & -1 & 2 \\
+      0 & -3 & 1
+      \end{bmatrix}
+      \label{eq:mat}
+\\
+vec&=&\begin{bmatrix}
+      2  \\
+      1 \\
+      0
+      \end{bmatrix}
+      \label{eq:vec}
+\end{eqnarray}
+Em \Haskell, podemos tornar explícito o espaço vectorial a que (\ref{eq:vec}) pertence definindo-o da forma seguinte,
+\begin{code}
+vec :: Vec X
+vec = V [(X1,2),(X2,1),(X3,0)]
+\end{code}
+assumindo definido o tipo
+\begin{code}
+data Vec a = V {outV :: [(a,Int)] } deriving (Ord)
+\end{code}
+e o ``tipo-dimensão'':
+\begin{code}
+data X = X1 | X2 | X3 deriving (Eq,Show,Ord)
+\end{code}
+
+Da mesma forma que \emph{tipamos} |vec|, também o podemos fazer para a matrix |mat| (\ref{eq:mat}), cujas colunas podem ser indexadas por |X| também e as linhas por |Bool|, por exemplo:
+\begin{code}
+mat :: X -> Vec Bool
+mat X1 = V [(False,1),(True,0)]
+mat X2 = V [(False,-1),(True,-3)]
+mat X3 = V [(False,2),(True,1)]
+\end{code}
+Quer dizer, matrizes podem ser encaradas como funções que dão vectores como
+resultado. Mais ainda, a multiplicação de |mat| por |vec| pode ser obtida
+correndo, simplesmente
+\begin{code}
+vec' = vec >>= mat
+\end{code}
+obtendo-se |vec' = V [(False,1),(True,-3)]| do tipo |Vec Bool|.
+Finalmente, se for dada a matrix
+\begin{code}
+neg :: Bool -> Vec Bool
+neg False = V [(False,0),(True,1)]
+neg True  = V [(False,1),(True,0)]
+\end{code}
+então a multiplicação de |neg| por |mat| mais não será que a matriz
+\begin{spec}
+neg .! mat
+\end{spec}
+também do tipo |X -> Vec Bool|.
+
+Obtém-se assim uma \emph{álgebra linear tipada}. Contudo, para isso é preciso
+mostrar que |Vec| é um \textbf{mónade}, e é esse o tema desta questão, em duas partes:
+\begin{itemize}
+\item	
+Instanciar |Vec| na class |Functor| em \Haskell:
+\begin{spec}
+instance Functor Vec where
+    fmap f = ....
+\end{spec}
+\item	
+Instanciar |Vec| na class |Monad| em \Haskell:
+\begin{spec}
+instance Monad Vec where
+   x >>= f = ....
+   return a = ...
+\end{spec}
+\end{itemize} 
+
 \part*{Anexos}
 
 \appendix
@@ -414,6 +501,7 @@ tirados de \cite{Ol05}.}
 |
 \qed
 \end{eqnarray*}
+
 Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por exemplo:
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
@@ -431,7 +519,63 @@ Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por ex
 }
 \end{eqnarray*}
 
+\section{Regra prática para a recursividade mútua em |Nat0|}\label{sec:mr}
+
+Nesta disciplina estudou-se como fazer \pd{programação dinâmica} por cálculo,
+recorrendo à lei de recursividade mútua.\footnote{Lei (\ref{eq:fokkinga})
+em \cite{Ol05}, página \pageref{eq:fokkinga}.}
+
+Para o caso de funções sobre os números naturais (|Nat0|, com functor |fF
+X = 1 + X|) pode derivar-se da lei que foi estudada uma
+	\emph{regra de algibeira}
+	\label{pg:regra}
+que se pode ensinar a programadores que não tenham estudado
+\cp{Cálculo de Programas}. Apresenta-se de seguida essa regra, tomando como
+exemplo o cálculo do ciclo-\textsf{for} que implementa a função de Fibonacci,
+recordar o sistema:
+\begin{spec}
+fib 0 = 1
+fib(n+1) = f n
+
+f 0 = 1
+f (n+1) = fib n + f n
+\end{spec}
+Obter-se-á de imediato
+\begin{code}
+fib' = p1 . for loop init where
+   loop(fib,f)=(f,fib+f)
+   init = (1,1)
+\end{code}
+usando as regras seguintes:
+\begin{itemize}
+\item	O corpo do ciclo |loop| terá tantos argumentos quanto o número de funções mutuamente recursivas.
+\item	Para as variáveis escolhem-se os próprios nomes das funções, pela ordem
+que se achar conveniente.\footnote{Podem obviamente usar-se outros símbolos, mas numa primeira leitura
+dá jeito usarem-se tais nomes.}
+\item	Para os resultados vão-se buscar as expressões respectivas, retirando a variável |n|.
+\item	Em |init| coleccionam-se os resultados dos casos de base das funções, pela mesma ordem.
+\end{itemize}
+Mais um exemplo, envolvendo polinómios do segundo grau $ax^2 + b x + c$ em |Nat0|.
+Seguindo o método estudado nas aulas\footnote{Secção 3.17 de \cite{Ol05} e tópico
+\href{https://www4.di.uminho.pt/~jno/media/cp/}{Recursividade mútua} nos vídeos de apoio às aulas teóricas.},
+de $f\ x = a x^2 + b x + c$ derivam-se duas funções mutuamente recursivas:
+\begin{spec}
+f 0 = c
+f (n+1) = f n + k n
+
+k 0 = a + b
+k(n+1) = k n + 2 a
+\end{spec}
+Seguindo a regra acima, calcula-se de imediato a seguinte implementação, em Haskell:
+\begin{code}
+f' a b c = p1 . for loop init where
+  loop(f,k) = (f+k,k+2*a)
+  init = (c,a+b) 
+\end{code}
+
 \section{Código fornecido}\label{sec:codigo}
+
+\subsection*{Problema 1}
 Teste relativo à figura da página \pageref{fig:histogramaA}:
 \begin{code}
 test1 = mostwater hghts
@@ -487,6 +631,57 @@ wx = fromLists  [[0.0,-51.9,0.0,0.0],[0.0,26.6,0.0,0.0],[-16.7,-5.5,-0.1,0.1]]
 \end{itemize}
 \textbf{NB}: Podem ser definidos e usados outros dados em função das experiências que se queiram fazer.
 
+\subsection*{Problema 3}
+Fórmula (\ref{eq:pi}) em Haskell:
+\begin{code}
+picalc n = (sum . map f) [0..n] where
+     f n = fromIntegral ((List.fac n) * (List.fac n)*(g n)) / fromIntegral (d n)
+     g n = 2^(n+1)
+     d n = List.fac ((2*n+1))
+\end{code}
+
+\subsection*{Problema 4}
+Se pedirmos ao \GHCi\ que nos mostre o vector |vec| obteremos:
+\begin{verbatim}
+{ X1 |-> 2 , X2 |-> 1 }
+\end{verbatim}
+Este resultado aparece mediante a seguinte instância de |Vec| na classe |Show|:
+\begin{code}
+instance (Show a, Ord a, Eq a) => Show (Vec a) where
+    show = showbag . consol . outV  where
+       showbag = concat .
+                 (++ [" }"]) .  ("{ ":) . 
+                 (intersperse " , ") .
+                 sort . 
+                 (map f) where f(a,b) = (show a) ++ " |-> " ++ (show b)
+\end{code}
+Outros detalhes da implementação de |Vec| em Haskell:
+\begin{code}
+instance Applicative Vec where
+    pure = return
+    (<*>) = aap
+
+instance (Eq a) => Eq (Vec a) where
+   b == b' = (outV b) `lequal` (outV b')
+           where lequal a b = isempty (a `ominus` b)
+                 ominus a b = a ++ negb b
+                 negb x = [(k,-i) | (k,i) <- x]
+\end{code}
+Funções auxiliares:
+\begin{code}
+consol :: (Eq b) => [(b, Int)] -> [(b, Int)]
+consol = filter nzero . map (id >< sum) . col where nzero(_,x)=x/=0
+
+isempty :: Eq a => [(a, Int)] -> Bool
+isempty = all (==0) . map snd . consol
+
+col :: (Eq a, Eq b) => [(a, b)] -> [(a, [b])]
+col x = nub [ k |-> [ d' | (k',d') <- x , k'==k ] | (k,d) <- x ] where a |-> b = (a,b)
+\end{code}
+
+
+
+
 %----------------- Soluções dos alunos -----------------------------------------%
 
 \section{Soluções dos alunos}\label{sec:resolucao}
@@ -501,121 +696,9 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
-Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista de candidatos para a resposta e um catamorfismo para obter o maior desses candidatos.
-
-Sejam $l$ uma lista não vazia de naturais. O primeiro candidato é dado por
-\[\text{min}(\text{head } l, \text{last } l) \times (\text{length } l - 1)\]
-
-Para escolhermos o próximo candidato, temos dois casos:
-\begin{enumerate}
-	\item Se $\text{head } l \geq \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
-
-	\item Se $\text{head } l < \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
-\end{enumerate}
-
-Além disso, podemos observar que reverter a lista é irrelevante para o resultado final. Portanto, podemos escrever a seguinte definição recursiva.
-
-\begin{eqnarray*}
-\start
-|
-	 lcbr(
-          g [] = []
-     )(
-          g l =  in.(id >< g).f l
-     )
-|
-\end{eqnarray*}
-
-onde:
 \begin{code}
-geq = uncurry (>=)
-len = fromIntegral.length
-f = (split (mul.(id><len)) snd).(head >< tail).diag.((Cp.cond (geq.(head >< last).diag) reverse id))
+mostwater = undefined
 \end{code}
-
-Portanto temos,
-\begin{eqnarray*}
-\start
-|
-	 lcbr(
-          g [] = []
-     )(
-          g l =  in.(id >< g).f l
-     )
-|
-\just\equiv{ definição pointwise }
-|
-	 lcbr(
-          g.nil = in 
-     )(
-          g.id =  in.(id >< g).f 
-     )
-|
-\just\equiv{ definição de in, Eq-+ }
-|
-	g . inid = either (in) (in.(id >< g).f)
-|
-\just\equiv{ (33), Fusão-+ }
-|
-	g = in.(either id ((id >< g).f)).outid
-|
-\just\equiv{ Absorção-+ }
-|
-	g = in.(either id (id >< g)).(id + f).outid
-|
-\just\equiv{ Universal-ana }
-|
-	g = ana ((id+f).outid)
-|
-\qed
-\end{eqnarray*}
-
-Além disso, já vimos nas aulas que o catamorfismo de listas
-
-\begin{code}
-h = cata (either zero umax)
-\end{code}
-
-obtém o valor máximo numa lista de naturais.
-
-Portanto, temos
-
-\begin{code}
-mostwater = hylo (either zero umax) ((id -|- f).outid)
-\end{code}
-onde:
-\begin{code}
-outid [] = i1 () 
-outid (h:t) = i2 (h:t)
-\end{code}
-
-Ilustrado pelo seguinte diagrama:
-
-\begin{eqnarray*}
-\xymatrix{
-    |[Nat0]|
-           \ar[d]_-{|ana g|}
-           \ar[r]_-{|outid|}
-&
-    |1 + [Nat0]|
-           \ar[r]_-{|id + f|}
-& 
-	|1 + Nat0 >< [Nat0]|
-           \ar[d]^{|id + id >< ana g|}
-\\
-     |[Nat0]|
-           \ar[d]_-{|cata h|}
-& &
-     |1+Nat0 >< [Nat0]|
-           \ar[ll]^-{|in|}
-           \ar[d]^-{|id + id >< h|}
-\\
-     |Nat0|
-& &
-     |1+Nat0 >< Nat0|
-           \ar[ll]^-{|either zero umax|}
-}
-\end{eqnarray*}
 
 \subsection*{Problema 2}
 
@@ -624,6 +707,134 @@ mapAccumRfilter p f = undefined
 
 mapAccumLfilter p f = undefined
 \end{code}
+
+\subsection*{Problema 3}
+
+Reparemos que
+\begin{eqnarray*}
+	|pi|_n = \sum_{i=0}^n \frac{(i!)^2 {2^{i+1}}}{(2i+1)!} = 2\sum_{i=0}^n \frac{(i!) \times (i!){2^{i}}}{(2i+1)!}  =  2\sum_{i=0}^n \frac{i! \times (2\cdot i \times 2\cdot (i-1) \times \dots \times 2 \cdot 2 \times 2\cdot 1)}{(2i+1)\times (2i)\times \dots \times 2 \times 1} = \\ =2\sum_{i=0}^n \frac{i!}{(2i+1)!!}  
+\end{eqnarray*}
+
+onde $n!!$ é o fatorial duplo.
+
+Seja $f(n) = \sum_{i=0}^n \frac{i!}{(2i+1)!!} = 1 + \sum_{i=0}^{n-1} \frac{(i+1)!}{(2i+3)!!} $, $g(n) = \frac{(n+1)!}{(2n+3)!!}$ e $h(n) = \frac{n+2}{2n+5}$.
+É fácil reparar que 
+\[
+f(n) = 1+\sum_{i=0}^{n-1} \frac{(i+1)!}{(2i+3)!!} = 1+ \sum_{i=0}^{n-1} g(i) \implies \begin{cases}
+f(0) = 1 \\
+f(n+1) = f(n)+ g(n)
+\end{cases}
+\]
+
+\[
+g(n) = \frac{(i+1)!}{(2i+3)!!} = \frac{1}{3} \times \prod_{n=0}^{n-1} h(i) \implies \begin{cases}
+g(0) = \frac{1}{3} \\
+g(n+1) = g(n)\times t(n)
+\end{cases}
+\]
+
+e
+
+\[
+h(n) = \frac{n+2}{2n+5} \implies \begin{cases}
+h(0) = \frac{2}{5} \\
+h(n+1) = \frac{n+3}{2n+7} = \frac{\frac{n+2}{2n+5} - 1  }{ 4 \frac{n+2}{2n+5} -3} = \frac{h(n)-1}{4h(n)-3}
+\end{cases}
+\]
+
+Ao escrever as funções na forma \textit{point-free} e recorrendo ás regras de cálculo usuais, tem-se
+
+\begin{code}
+
+f.inNat = (either (const 1) (add)).(1 + split f g )
+g.inNat = (either (const (1/3)) (mul)).(1 + split g t )
+h.inNat = (either (const (2/5)) (calc)).(1 + t) where
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+	
+\end{code}
+
+Recorrendo à lei de absorção $+$ e $\times$ e com auxilío da função assocl, temos
+
+\begin{code}
+
+f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g t))
+g.inNat = (either (const (1/3)) (mul.snd)).(1 + split f (split g t))
+h.inNat = (either (const (2/5)) (calc.snd.snd)).(1 + split f (split g t)) where
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+	
+\end{code}
+
+Podemos unir as equações numa só através do Eq-$\times$ e Fusão-$\times$. Portanto, unindo as duas últimas equações e em seguida aplicando a lei da troca, temos 
+
+\begin{code}
+
+f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g t))
+(split g h).inNat = (either (split (const (1/3)) (const (2/5))) (split (mul.snd) (calc.snd.snd)  )).(1 + split f (split g t)) where
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+	
+\end{code}
+
+Repetindo o mesmo raciocínio de forma análoga, tem-se por fim
+
+\begin{code}
+
+(split f (split g h)).inNat = (either (const ((1,(1/3,2/5)))) (split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) ))).(1 + split f (split g t)) where
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+	
+\end{code}
+
+Ora, pela lei de universal-cata, tem-se que a função |split f (split g h)| é da forma |for loop inic|. Portanto, se |worker = split f (split g h)|, tem-se
+
+\begin{code}
+
+worker = for loop inic
+loop = split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) )
+inic = const ((1,(1/3,2/5))) where 
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+\end{code} 
+
+Finalmente, como |piloop = (2*).fst.(split f (split g h))|, temos 
+\begin{code}
+piloop = wrapper . worker
+
+worker = for loop inic 
+
+loop = split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) ) where 
+	calc n = (n-1)/(4*n-3)
+	add (x,y) = x + y
+	mul (x,y) = x*y
+
+inic = const ((1,(1/3,2/5)))  
+
+wrapper = (2*).fst 
+
+
+\end{code}
+
+\subsection*{Problema 4}
+Functor:
+\begin{code}
+instance Functor Vec where
+    fmap f = undefined
+\end{code}
+Monad:
+\begin{code}
+instance Monad Vec where
+   x >>= f = undefined
+   return = undefined
+
+\end{code}
+
 
 %----------------- Índice remissivo (exige makeindex) -------------------------%
 
