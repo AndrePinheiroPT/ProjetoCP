@@ -755,6 +755,7 @@ Para o monad, vamos definir o $\mu$ (|return|) e o $\upsilon$ (|miu|) para facil
 de outras funções
 
 |return :: a -> Vec a|
+
 |return a = V [(a,1)]|
 
 para qualquer |a|, fazemos um |singleton|, associado com 1, porque é o 
