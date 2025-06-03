@@ -65,7 +65,7 @@ miu = V . concat . map (outV . uncurry sumV) . outV
 
 instance Monad Vec where
    x >>= f = miu (fmap f x)
-   return a = V [(a, 0)]
+   return a = V [(a, 1)]
 
 tt = (V [(True, 10), (False, 20)])
 ttt = return tt :: Vec(Vec Bool)

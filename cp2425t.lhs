@@ -714,26 +714,104 @@ mapAccumLfilter p f = undefined
 \subsection*{Problema 4}
 Para fazer o funtor, vamos explorar melhor o in e o out do Vec.
 
-||
+|V :: [(a, Int)] -> Vec a|
+
+|outV :: Vec -> [(a, Int)]|
+
+Como o |outV| e |V| usam lista como input e output, podemos usar funções de listas para auxiliar
+nas nossas funções de |Vec|.
 
 Functor:
+
+|fmap :: (a -> b) -> Vec a -> Vec b|
+
+Utilizando o |outV| e o |map|, podemos definir o seguinte diagrama:
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |Vec A|
+           \ar[d]_-{|outV|}
+\\
+     |Seq ((A >< Int))|
+           \ar[d]_-{|map (f >< id)|}
+\\
+     |Seq ((B >< Int))|
+           \ar[d]_-{|V|}
+\\
+     |Vec B|
+}
+\end{eqnarray*}
+
+O que nos permite definir o |fmap| assim:
+
 \begin{code}
 instance Functor Vec where
     fmap f = V . (map (f >< id)) . outV
 \end{code}
+
 Monad:
+
+Para o monad, vamos definir o $\mu$ (|return|) e o $\upsilon$ (|miu|) para facilitar na definição 
+de outras funções
+
+|return :: a -> Vec a|
+|return a = V [(a,1)]|
+
+para qualquer |a|, fazemos um |singleton|, associado com 1, porque é o 
+elemento neutro da multiplicação.
+
+|miu :: Vec (Vec a) -> Vec a|
+
+ou seja
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |Vec(Vec A)|
+           \ar[d]_-{|outV|}
+\\
+     |Seq ((Vec A >< Int))|
+           \ar[d]_-{|map (outV . uncurry mulV)|}
+\\
+     |Seq(Seq ((A >< Int)))|
+           \ar[d]_-{|concat|}
+\\
+     |Seq A|
+           \ar[d]_-{|V|}
+\\
+     |Vec A|
+}
+\end{eqnarray*}
+
+sendo o |mulV| o produto escalar de vetores.
 \begin{code}
 mulV :: Vec a -> Int -> Vec a
 mulV v x = V (map (id >< (x*)) (outV v))
+\end{code}
 
-miu :: Vec (Vec a) -> Vec a
+e assim definimos:
+\begin{code}
 miu = V . concat . map (outV . uncurry mulV) . outV
+\end{code}
 
+falta apenas definir |(>>=) :: Vec a -> (a -> Vec b) -> Vec b|,
+com o |miu| e |fmap| definido, é simples definir |(>>=)|:
 
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |Vec A|
+           \ar[d]_-{|fmap f|}
+\\
+     |Vec (Vec B)|
+           \ar[d]_-{|miu|}
+\\
+     |Vec B|
+}
+\end{eqnarray*}
+
+E assim concluimos que
+\begin{code}
 instance Monad Vec where
    x >>= f = miu (fmap f x)
    return a = V [(a, 0)]
-
 \end{code}
 
 

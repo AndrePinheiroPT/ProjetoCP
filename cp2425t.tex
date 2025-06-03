@@ -982,7 +982,38 @@ que sejam necessárias.
 
 
 \subsection*{Problema 4}
+Para fazer o funtor, vamos explorar melhor o in e o out do Vec.
+
+\ensuremath{\Conid{V}\mathbin{::}[\mskip1.5mu (\Varid{a},\Conid{Int})\mskip1.5mu]\to \Conid{Vec}\;\Varid{a}}
+
+\ensuremath{\Varid{outV}\mathbin{::}\Conid{Vec}\to [\mskip1.5mu (\Varid{a},\Conid{Int})\mskip1.5mu]}
+
+Como o \ensuremath{\Varid{outV}} e \ensuremath{\Conid{V}} usam lista como input e output, podemos usar funções de listas para auxiliar
+nas nossas funções de \ensuremath{\Conid{Vec}}.
+
 Functor:
+
+\ensuremath{\mathsf{fmap}\mathbin{::}(\Varid{a}\to \Varid{b})\to \Conid{Vec}\;\Varid{a}\to \Conid{Vec}\;\Varid{b}}
+
+Utilizando o \ensuremath{\Varid{outV}} e o \ensuremath{\map }, podemos definir o seguinte diagrama:
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+     \ensuremath{\Conid{Vec}\;\Conid{A}}
+           \ar[d]_-{\ensuremath{\Varid{outV}}}
+\\
+     \ensuremath{{(\Conid{A}\times\Conid{Int})}^{*}}
+           \ar[d]_-{\ensuremath{\map \;(\Varid{f}\times\Varid{id})}}
+\\
+     \ensuremath{{(\Conid{B}\times\Conid{Int})}^{*}}
+           \ar[d]_-{\ensuremath{\Conid{V}}}
+\\
+     \ensuremath{\Conid{Vec}\;\Conid{B}}
+}
+\end{eqnarray*}
+
+O que nos permite definir o \ensuremath{\mathsf{fmap}} assim:
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -993,19 +1024,77 @@ Functor:
 \>[5]{}\mathsf{fmap}\;\Varid{f}\mathrel{=}\Conid{V}\comp (\map \;(\Varid{f}\times\Varid{id}))\comp \Varid{outV}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
 Monad:
+
+Para o monad, vamos definir o $\mu$ (\ensuremath{\Varid{return}}) e o $\upsilon$ (\ensuremath{\Varid{miu}}) para facilitar na definição 
+de outras funções
+
+\ensuremath{\Varid{return}\mathbin{::}\Varid{a}\to \Conid{Vec}\;\Varid{a}}
+\ensuremath{\Varid{return}\;\Varid{a}\mathrel{=}\Conid{V}\;[\mskip1.5mu (\Varid{a},\mathrm{1})\mskip1.5mu]}
+
+para qualquer \ensuremath{\Varid{a}}, fazemos um \ensuremath{\Varid{singleton}}, associado com 1, porque é o 
+elemento neutro da multiplicação.
+
+\ensuremath{\Varid{miu}\mathbin{::}\Conid{Vec}\;(\Conid{Vec}\;\Varid{a})\to \Conid{Vec}\;\Varid{a}}
+
+ou seja
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+     \ensuremath{\Conid{Vec}\;(\Conid{Vec}\;\Conid{A})}
+           \ar[d]_-{\ensuremath{\Varid{outV}}}
+\\
+     \ensuremath{{(\Conid{Vec}\;\Conid{A}\times\Conid{Int})}^{*}}
+           \ar[d]_-{\ensuremath{\map \;(\Varid{outV}\comp \uncurry{\Varid{mulV}})}}
+\\
+     \ensuremath{{{(\Conid{A}\times\Conid{Int})}^{*}}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{concat}}}
+\\
+     \ensuremath{{\Conid{A}}^{*}}
+           \ar[d]_-{\ensuremath{\Conid{V}}}
+\\
+     \ensuremath{\Conid{Vec}\;\Conid{A}}
+}
+\end{eqnarray*}
+
+sendo o \ensuremath{\Varid{mulV}} o produto escalar de vetores.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{mulV}\mathbin{::}\Conid{Vec}\;\Varid{a}\to \Conid{Int}\to \Conid{Vec}\;\Varid{a}{}\<[E]%
 \\
 \>[B]{}\Varid{mulV}\;\Varid{v}\;\Varid{x}\mathrel{=}\Conid{V}\;(\map \;(\Varid{id}\times(\Varid{x}\mathbin{*}))\;(\Varid{outV}\;\Varid{v})){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{miu}\mathbin{::}\Conid{Vec}\;(\Conid{Vec}\;\Varid{a})\to \Conid{Vec}\;\Varid{a}{}\<[E]%
-\\
+\ColumnHook
+\end{hscode}\resethooks
+
+e assim definimos:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{miu}\mathrel{=}\Conid{V}\comp \Varid{concat}\comp \map \;(\Varid{outV}\comp \uncurry{\Varid{mulV}})\comp \Varid{outV}{}\<[E]%
-\\[\blanklineskip]%
+\ColumnHook
+\end{hscode}\resethooks
+
+falta apenas definir \ensuremath{(\bind )\mathbin{::}\Conid{Vec}\;\Varid{a}\to (\Varid{a}\to \Conid{Vec}\;\Varid{b})\to \Conid{Vec}\;\Varid{b}},
+com o \ensuremath{\Varid{miu}} e \ensuremath{\mathsf{fmap}} definido, é simples definir \ensuremath{(\bind )}:
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+     \ensuremath{\Conid{Vec}\;\Conid{A}}
+           \ar[d]_-{\ensuremath{\mathsf{fmap}\;\Varid{f}}}
+\\
+     \ensuremath{\Conid{Vec}\;(\Conid{Vec}\;\Conid{B})}
+           \ar[d]_-{\ensuremath{\Varid{miu}}}
+\\
+     \ensuremath{\Conid{Vec}\;\Conid{B}}
+}
+\end{eqnarray*}
+
+E assim concluimos que
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\mathbf{instance}\;\Conid{Monad}\;\Conid{Vec}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
