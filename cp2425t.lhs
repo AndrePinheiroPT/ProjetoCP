@@ -751,7 +751,7 @@ instance Functor Vec where
 
 Monad:
 
-Para o monad, vamos definir o $\mu$ (|return|) e o $\upsilon$ (|miu|) para facilitar na definição 
+Para o monad, vamos definir o $\mu$ (|miu|) e o $\upsilon$ (|return|) para facilitar na definição 
 de outras funções
 
 |return :: a -> Vec a|
