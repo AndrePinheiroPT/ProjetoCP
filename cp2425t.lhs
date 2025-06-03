@@ -715,13 +715,20 @@ mapAccumLfilter p f = undefined
 Functor:
 \begin{code}
 instance Functor Vec where
-    fmap f = undefined
+    fmap f = V . (map (f >< id)) . outV
 \end{code}
 Monad:
 \begin{code}
+mulV :: Vec a -> Int -> Vec a
+mulV v x = V (map (id >< (x*)) (outV v))
+
+miu :: Vec (Vec a) -> Vec a
+miu = V . concat . map (outV . uncurry mulV) . outV
+
+
 instance Monad Vec where
-   x >>= f = undefined
-   return = undefined
+   x >>= f = miu (fmap f x)
+   return a = V [(a, 0)]
 
 \end{code}
 

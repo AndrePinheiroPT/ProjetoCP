@@ -21,22 +21,6 @@ main = undefined
 
 data Vec a = V {outV :: [(a,Int)] } deriving (Ord)
 
-inVec = V . inList
-
-outVec = outList . outV
-
-baseVec = baseList
-
--- (2) Ana + cata + hylo -------------------------------------------------------
-
--- (3) Map ---------------------------------------------------------------------
-
-instance Functor Vec where
-    fmap f = V . (map (f >< id)) . outV
-
-
-
-
 
 instance (Show a, Ord a, Eq a) => Show (Vec a) where
     show = showbag . consol . outV  where
@@ -66,6 +50,26 @@ col :: (Eq a, Eq b) => [(a, b)] -> [(a, [b])]
 col x = nub [ k |-> [ d' | (k',d') <- x , k'==k ] | (k,d) <- x ] where a |-> b = (a,b)
 
 
+instance Functor Vec where
+    fmap f = V . (map (f >< id)) . outV
+
+-- se for do msm valor, por exemplo [(True, x), (True, y)]
+-- da show {True |-> x + y}
+
+sumV :: Vec a -> Int -> Vec a
+sumV v x = V (map (id >< (x*)) (outV v))
+
+miu :: Vec (Vec a) -> Vec a
+miu = V . concat . map (outV . uncurry sumV) . outV
+
+
+instance Monad Vec where
+   x >>= f = miu (fmap f x)
+   return a = V [(a, 0)]
+
+tt = (V [(True, 10), (False, 20)])
+ttt = return tt :: Vec(Vec Bool)
+
 
 vec = V [(X1,2),(X2,1),(X3,0)]
 
@@ -76,35 +80,14 @@ mat X1 = V [(False,1),(True,0)]
 mat X2 = V [(False,-1),(True,-3)]
 mat X3 = V [(False,2),(True,1)]
 
+
+neg :: Bool -> Vec Bool
+neg False = V [(False,0),(True,1)]
+neg True  = V [(False,1),(True,0)]
+
 mat2 :: Vec (Vec Bool)
 mat2 = V [
     (V [(False,1),(True,0)]  , 1),
     (V [(False,-1),(True,-3)], 1),
     (V [(False,2),(True,1)]  , 1)
     ]
-
-neg :: Bool -> Vec Bool
-neg False = V [(False,0),(True,1)]
-neg True  = V [(False,1),(True,0)]
-
-
-
-
--- se for do msm valor, por exemplo [(True, x), (True, y)]
--- da show {True |-> x + y}
-
--- (>>=)  :: Vec a -> (a -> Vec b) -> Vec b
-
-sumV :: Vec a -> Int -> Vec a
-sumV v x = V (map (id >< (x+)) (outV v))
-
-miu :: Vec (Vec a) -> Vec a
-miu = V . concatMap (\(V ys, i) -> map (id >< (i+)) ys) . outV
-
-
-instance Monad Vec where
-   x >>= f = miu (fmap f x)
-   return a = V [(a, 0)]  -- 0 como default
-
-tt = (V [(True, 10), (False, 20)])
-ttt = return tt :: Vec(Vec Bool)

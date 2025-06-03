@@ -998,13 +998,21 @@ Monad:
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{4}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{sumV}\mathbin{::}\Conid{Vec}\;\Varid{a}\to \Conid{Int}\to \Conid{Vec}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{sumV}\;\Varid{v}\;\Varid{x}\mathrel{=}\Conid{V}\;(\map \;(\Varid{id}\times(\Varid{x}\mathbin{*}))\;(\Varid{outV}\;\Varid{v})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{miu}\mathbin{::}\Conid{Vec}\;(\Conid{Vec}\;\Varid{a})\to \Conid{Vec}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{miu}\mathrel{=}\Conid{V}\comp \Varid{concat}\comp \map \;(\Varid{outV}\comp \uncurry{\Varid{sumV}})\comp \Varid{outV}{}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Monad}\;\Conid{Vec}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{x}\bind \Varid{f}\mathrel{=}\bot {}\<[E]%
+\>[4]{}\Varid{x}\bind \Varid{f}\mathrel{=}\Varid{miu}\;(\mathsf{fmap}\;\Varid{f}\;\Varid{x}){}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{return}\mathrel{=}\bot {}\<[E]%
+\>[4]{}\Varid{return}\;\Varid{a}\mathrel{=}\Conid{V}\;[\mskip1.5mu (\Varid{a},\mathrm{0})\mskip1.5mu]{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
