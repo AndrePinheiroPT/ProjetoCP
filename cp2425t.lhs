@@ -593,25 +593,6 @@ Com isto, resulta:
 \begin{code}
 myMapAccumR f = cataListAcc (either myMapAccumR1 (myMapAccumR2 f))
 \end{code}
-E segue-se o diagrama do filter e o seu catamorfismo:
-\begin{eqnarray*}
-\xymatrix@@C=4cm{
-    |Seq (A)|
-           \ar[d]_-{|mapFilter p|}
-           \ar[r]^-{|outList|}
-&
-    |1 + A >< Seq(A)|
-           \ar[d]^{|id + (mapFilter p)|}
-\\
-     |Seq(A)|
-&
-     |1 + A >< Seq(A)|
-           \ar[l]^-{|either nil (cond (p . p1) cons p2)|}
-}
-\end{eqnarray*}
-\begin{code}
-myfilter p = cataList (either nil (cond (p . p1) cons p2))
-\end{code}
 E fazer o mapAccumL é análogo, trocando o funtor assim:
 \begin{code}
 outListAcc' ([], s) = i1 ((), s)
@@ -627,6 +608,26 @@ myMapAccumL f = cataListAcc' (either myMapAccumL1 (myMapAccumL2 f))
 \end{code}
 como estamos começar pelo fim, então também temos de começar a adicionar os
 elementos pelo fim.
+
+E segue-se o diagrama do |filter| e o seu catamorfismo:
+\begin{eqnarray*}
+\xymatrix@@C=4cm{
+    |Seq (A)|
+           \ar[d]_-{|myfilter p|}
+           \ar[r]^-{|outList|}
+&
+    |1 + A >< Seq(A)|
+           \ar[d]^{|id + (myfilter p)|}
+\\
+     |Seq(A)|
+&
+     |1 + A >< Seq(A)|
+           \ar[l]^-{|either nil (cond (p . p1) cons p2)|}
+}
+\end{eqnarray*}
+\begin{code}
+myfilter p = cataList (either nil (cond (p . p1) cons p2))
+\end{code}
 
 \newpage
 \noindent
@@ -694,7 +695,7 @@ e se aplicarmos esta estrutura no nosso diagrama do mapAccumR2 obtemos o mapAccu
      |((C >< S) >< Seq(C)) + ((C >< S) >< Seq(C))|
            \ar[d]_-{|either ((cons >< id) . zed) (swap . (p2 >< id))|}
 \\
-     |(C >< S) >< Seq(C)|
+     |Seq(C) >< S|
 }
 \end{eqnarray*}
 o que resulta
