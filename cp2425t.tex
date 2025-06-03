@@ -1027,10 +1027,11 @@ O que nos permite definir o \ensuremath{\mathsf{fmap}} assim:
 
 Monad:
 
-Para o monad, vamos definir o $\mu$ (\ensuremath{\Varid{return}}) e o $\upsilon$ (\ensuremath{\Varid{miu}}) para facilitar na definição 
+Para o monad, vamos definir o $\mu$ (\ensuremath{\Varid{miu}}) e o $\upsilon$ (\ensuremath{\Varid{return}}) para facilitar na definição 
 de outras funções
 
 \ensuremath{\Varid{return}\mathbin{::}\Varid{a}\to \Conid{Vec}\;\Varid{a}}
+
 \ensuremath{\Varid{return}\;\Varid{a}\mathrel{=}\Conid{V}\;[\mskip1.5mu (\Varid{a},\mathrm{1})\mskip1.5mu]}
 
 para qualquer \ensuremath{\Varid{a}}, fazemos um \ensuremath{\Varid{singleton}}, associado com 1, porque é o 
