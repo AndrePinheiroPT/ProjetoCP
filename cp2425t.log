@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.16)  22 MAY 2025 20:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.15)  3 JUN 2025 13:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1478,30 +1478,6 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 
 \openout7 = `cp2425t.ptb'.
 
-
-Overfull \hbox (128.0374pt too wide) has occurred while \output is active
- [][]| 
- []
-
-[10]
-\openout7 = `cp2425t.ptb'.
-
-\openout7 = `cp2425t.ptb'.
-
-\openout7 = `cp2425t.ptb'.
-
-\openout7 = `cp2425t.ptb'.
-
-\openout7 = `cp2425t.ptb'.
-
-
-Overfull \hbox (128.0374pt too wide) has occurred while \output is active
- [][]| 
- []
-
-[11]
-\openout7 = `cp2425t.ptb'.
-
 \openout7 = `cp2425t.ptb'.
 
  (./cp2425t.ind
@@ -1509,7 +1485,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  [][]| 
  []
 
-[12] [13
+[10] [11
 
 
 ]) (./cp2425t.bbl
@@ -1522,7 +1498,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  [][]| 
  []
 
-[14
+[12
 
 ] (./cp2425t.aux)
  ***********
@@ -1537,11 +1513,11 @@ Package rerunfilecheck Info: File `cp2425t.out' has not changed.
 (rerunfilecheck)             Checksum: 5F452AB781E4B92AEB3757E0DDBE6DE1;1503.
  ) 
 Here is how much of TeX's memory you used:
- 47816 strings out of 476106
- 1046738 string characters out of 5793933
- 1951975 words of memory out of 5000000
- 69115 multiletter control sequences out of 15000+600000
- 821352 words of font info for 161 fonts, out of 8000000 for 9000
+ 47798 strings out of 476106
+ 1046409 string characters out of 5793933
+ 1946975 words of memory out of 5000000
+ 69101 multiletter control sequences out of 15000+600000
+ 820488 words of font info for 159 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  99i,19n,101p,3281b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
@@ -1557,19 +1533,18 @@ nts/type1/paratype/ptsans/PTS55F.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /ptsans/PTS75F.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/xypic/xybtip10.pfb>
-Output written on cp2425t.pdf (15 pages, 690410 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/xypic/xybtip10.pfb>
+Output written on cp2425t.pdf (13 pages, 674998 bytes).
 PDF statistics:
- 383 PDF objects out of 1000 (max. 8388607)
- 309 compressed objects within 4 object streams
- 38 named destinations out of 1000 (max. 500000)
+ 366 PDF objects out of 1000 (max. 8388607)
+ 297 compressed objects within 3 object streams
+ 36 named destinations out of 1000 (max. 500000)
  112 words of extra memory for PDF output out of 10000 (max. 10000000)
 
