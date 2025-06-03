@@ -712,6 +712,10 @@ mapAccumLfilter p f = undefined
 
 
 \subsection*{Problema 4}
+Para fazer o funtor, vamos explorar melhor o in e o out do Vec.
+
+||
+
 Functor:
 \begin{code}
 instance Functor Vec where

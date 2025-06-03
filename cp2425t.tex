@@ -990,7 +990,7 @@ Functor:
 \>[B]{}\mathbf{instance}\;\Conid{Functor}\;\Conid{Vec}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mathsf{fmap}\;\Varid{f}\mathrel{=}\bot {}\<[E]%
+\>[5]{}\mathsf{fmap}\;\Varid{f}\mathrel{=}\Conid{V}\comp (\map \;(\Varid{f}\times\Varid{id}))\comp \Varid{outV}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 Monad:
@@ -998,13 +998,13 @@ Monad:
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{4}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{sumV}\mathbin{::}\Conid{Vec}\;\Varid{a}\to \Conid{Int}\to \Conid{Vec}\;\Varid{a}{}\<[E]%
+\>[B]{}\Varid{mulV}\mathbin{::}\Conid{Vec}\;\Varid{a}\to \Conid{Int}\to \Conid{Vec}\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\Varid{sumV}\;\Varid{v}\;\Varid{x}\mathrel{=}\Conid{V}\;(\map \;(\Varid{id}\times(\Varid{x}\mathbin{*}))\;(\Varid{outV}\;\Varid{v})){}\<[E]%
+\>[B]{}\Varid{mulV}\;\Varid{v}\;\Varid{x}\mathrel{=}\Conid{V}\;(\map \;(\Varid{id}\times(\Varid{x}\mathbin{*}))\;(\Varid{outV}\;\Varid{v})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{miu}\mathbin{::}\Conid{Vec}\;(\Conid{Vec}\;\Varid{a})\to \Conid{Vec}\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\Varid{miu}\mathrel{=}\Conid{V}\comp \Varid{concat}\comp \map \;(\Varid{outV}\comp \uncurry{\Varid{sumV}})\comp \Varid{outV}{}\<[E]%
+\>[B]{}\Varid{miu}\mathrel{=}\Conid{V}\comp \Varid{concat}\comp \map \;(\Varid{outV}\comp \uncurry{\Varid{mulV}})\comp \Varid{outV}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Monad}\;\Conid{Vec}\;\mathbf{where}{}\<[E]%
 \\
