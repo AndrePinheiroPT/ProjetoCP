@@ -794,7 +794,7 @@ miu = V . concat . map (outV . uncurry mulV) . outV
 \end{code}
 
 falta apenas definir |(>>=) :: Vec a -> (a -> Vec b) -> Vec b|,
-com o |miu| e |fmap| definido, é simples definir |(>>=)|:
+com o |miu| e |fmap| definido, fica simples definir:
 
 \begin{eqnarray*}
 \xymatrix@@C=2cm{
