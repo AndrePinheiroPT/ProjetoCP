@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.16)  22 MAY 2025 20:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.16)  7 JUN 2025 07:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1099,6 +1099,9 @@ Package: makeidx 2021/10/04 v1.0m Standard LaTeX package
 )
 \pn=\count349
 )
+(/usr/share/texlive/texmf-dist/tex/latex/cancel/cancel.sty
+Package: cancel 2013/04/12 v2.2 Cancel math terms
+)
 \@indexfile=\write6
 \openout6 = `cp2425t.idx'.
 
@@ -1123,7 +1126,7 @@ Package: polytable 2013/07/18 v0.8.5 `polytable' package (Andres Loeh)
 )
 \blanklineskip=\skip74
 LaTeX Font Info:    Trying to load font information for T1+PTSerif-TLF on input
- line 278.
+ line 279.
 
 (/usr/share/texlive/texmf-dist/tex/latex/paratype/T1PTSerif-TLF.fd
 File: T1PTSerif-TLF.fd 2014/02/02 Font definitions for T1/PTSerif-TLF.
@@ -1136,25 +1139,25 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 (./cp2425t.aux)
 \openout1 = `cp2425t.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 278.
-LaTeX Font Info:    ... okay on input line 278.
-Package hyperref Info: Link coloring ON on input line 278.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 279.
+LaTeX Font Info:    ... okay on input line 279.
+Package hyperref Info: Link coloring ON on input line 279.
  (./cp2425t.out) (./cp2425t.out)
 \@outlinefile=\write8
 \openout8 = `cp2425t.out'.
@@ -1220,25 +1223,25 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 278
+LaTeX Font Info:    Trying to load font information for U+msa on input line 279
 .
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 278
+LaTeX Font Info:    Trying to load font information for U+msb on input line 279
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for U+stmry on input line 2
-78.
+79.
 
 (/usr/share/texlive/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
-Package xypdf Info: Line width: 0.43799pt on input line 278.
+Package xypdf Info: Line width: 0.43799pt on input line 279.
 \c@lstlisting=\count359
 LaTeX Font Info:    Trying to load font information for T1+PTSans-TLF on input 
-line 280.
+line 281.
 
 (/usr/share/texlive/texmf-dist/tex/latex/paratype/T1PTSans-TLF.fd
 File: T1PTSans-TLF.fd 2011/05/04 (autoinst with patch) Font definitions for T1/
@@ -1308,7 +1311,7 @@ media/EE.jpg>])
 <cp2425t_media/histogramA.png, id=52, 884.30376pt x 620.3175pt>
 File: cp2425t_media/histogramA.png Graphic file (type png)
 <use cp2425t_media/histogramA.png>
-Package pdftex.def Info: cp2425t_media/histogramA.png  used on input line 317.
+Package pdftex.def Info: cp2425t_media/histogramA.png  used on input line 318.
 (pdftex.def)             Requested size: 258.21019pt x 181.12741pt.
 \openout7 = `cp2425t.ptb'.
 
@@ -1324,7 +1327,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.348 
+l.349 
        [1
 
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/paratype/ptserif_t1.enc} <./cp24
@@ -1332,13 +1335,13 @@ l.348
 <cp2425t_media/RNN-general.png, id=73, 684.5575pt x 250.9375pt>
 File: cp2425t_media/RNN-general.png Graphic file (type png)
 <use cp2425t_media/RNN-general.png>
-Package pdftex.def Info: cp2425t_media/RNN-general.png  used on input line 356.
+Package pdftex.def Info: cp2425t_media/RNN-general.png  used on input line 357.
 
 (pdftex.def)             Requested size: 211.26028pt x 77.44138pt.
 \openout7 = `cp2425t.ptb'.
 
 LaTeX Font Info:    Trying to load font information for T1+PTMono-TLF on input 
-line 379.
+line 380.
 
 (/usr/share/texlive/texmf-dist/tex/latex/paratype/T1PTMono-TLF.fd
 File: T1PTMono-TLF.fd 2014/02/02 Font definitions for T1/PTMono-TLF.
@@ -1348,7 +1351,7 @@ File: T1PTMono-TLF.fd 2014/02/02 Font definitions for T1/PTMono-TLF.
 <cp2425t_media/karpathy.jpeg, id=93, 1333.98375pt x 417.56pt>
 File: cp2425t_media/karpathy.jpeg Graphic file (type jpg)
 <use cp2425t_media/karpathy.jpeg>
-Package pdftex.def Info: cp2425t_media/karpathy.jpeg  used on input line 402.
+Package pdftex.def Info: cp2425t_media/karpathy.jpeg  used on input line 403.
 (pdftex.def)             Requested size: 328.6279pt x 102.86696pt.
 
 Overfull \hbox (128.0374pt too wide) has occurred while \output is active
@@ -1378,7 +1381,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 
 [3 <./cp2425t_media/karpathy.jpeg>]
 LaTeX Font Info:    Trying to load font information for TS1+PTSerif-TLF on inpu
-t line 493.
+t line 494.
 
 (/usr/share/texlive/texmf-dist/tex/latex/paratype/TS1PTSerif-TLF.fd
 File: TS1PTSerif-TLF.fd 2014/02/02 Font definitions for TS1/PTSerif-TLF.
@@ -1390,7 +1393,7 @@ File: TS1PTSerif-TLF.fd 2014/02/02 Font definitions for TS1/PTSerif-TLF.
 <cp2425t_media/lhs.jpg, id=130, 1557.82pt x 967.615pt>
 File: cp2425t_media/lhs.jpg Graphic file (type jpg)
 <use cp2425t_media/lhs.jpg>
-Package pdftex.def Info: cp2425t_media/lhs.jpg  used on input line 555.
+Package pdftex.def Info: cp2425t_media/lhs.jpg  used on input line 556.
 (pdftex.def)             Requested size: 187.78532pt x 116.62555pt.
 
 Overfull \hbox (128.0374pt too wide) has occurred while \output is active
@@ -1406,7 +1409,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 [5] <xymatrix 2x2 191>
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 667.
+(hyperref)                removing `subscript' on input line 668.
 
 \openout7 = `cp2425t.ptb'.
 
@@ -1428,7 +1431,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 File: cp2425t_media/karpathy_charseq.jpeg Graphic file (type jpg)
 <use cp2425t_media/karpathy_charseq.jpeg>
 Package pdftex.def Info: cp2425t_media/karpathy_charseq.jpeg  used on input lin
-e 759.
+e 760.
 (pdftex.def)             Requested size: 328.6279pt x 264.13274pt.
 \openout7 = `cp2425t.ptb'.
 
@@ -1475,6 +1478,11 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 \openout7 = `cp2425t.ptb'.
 
 \openout7 = `cp2425t.ptb'.
+
+
+Overfull \hbox (28.65878pt too wide) in alignment at lines 985--987
+ [][][] []
+ []
 
 \openout7 = `cp2425t.ptb'.
 
@@ -1537,13 +1545,13 @@ Package rerunfilecheck Info: File `cp2425t.out' has not changed.
 (rerunfilecheck)             Checksum: 5F452AB781E4B92AEB3757E0DDBE6DE1;1503.
  ) 
 Here is how much of TeX's memory you used:
- 47816 strings out of 476106
- 1046738 string characters out of 5793933
- 1951975 words of memory out of 5000000
- 69115 multiletter control sequences out of 15000+600000
+ 47857 strings out of 476106
+ 1047479 string characters out of 5793933
+ 1950975 words of memory out of 5000000
+ 69152 multiletter control sequences out of 15000+600000
  821352 words of font info for 161 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 99i,19n,101p,3281b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,19n,101p,3290b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{section.3.17} has been referenced but does not exis
 t, replaced by a fixed one
@@ -1561,15 +1569,16 @@ m/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/latxfont/line10.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /xypic/xybtip10.pfb>
-Output written on cp2425t.pdf (15 pages, 690410 bytes).
+Output written on cp2425t.pdf (15 pages, 693335 bytes).
 PDF statistics:
- 383 PDF objects out of 1000 (max. 8388607)
- 309 compressed objects within 4 object streams
+ 388 PDF objects out of 1000 (max. 8388607)
+ 312 compressed objects within 4 object streams
  38 named destinations out of 1000 (max. 500000)
  112 words of extra memory for PDF output out of 10000 (max. 10000000)
 

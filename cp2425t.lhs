@@ -1,5 +1,6 @@
 \documentclass[11pt, a4paper, fleqn]{article}
 \usepackage{cp2425t}
+\usepackage{cancel}
 \makeindex
 
 %================= lhs2tex=====================================================%
@@ -414,7 +415,7 @@ basta executar os seguintes comandos:
 \begin{Verbatim}[fontsize=\small]
     $ docker build -t cp2425t .
     $ docker run -v ${PWD}:/cp2425t -it cp2425t
-\end{Verbatim}
+c\end{Verbatim}
 \textbf{NB}: O objetivo é que o container\ seja usado \emph{apenas} 
 para executar o \GHCi\ e os comandos relativos ao \Latex.
 Deste modo, é criado um \textit{volume} (cf.\ a opção \texttt{-v \$\{PWD\}:/cp2425t}) 
@@ -712,7 +713,7 @@ mapAccumLfilter p f = undefined
 
 Reparemos que
 \begin{eqnarray*}
-	|pi|_n = \sum_{i=0}^n \frac{(i!)^2 {2^{i+1}}}{(2i+1)!} = 2\sum_{i=0}^n \frac{(i!) \times (i!){2^{i}}}{(2i+1)!}  =  2\sum_{i=0}^n \frac{i! \times (2\cdot i \times 2\cdot (i-1) \times \dots \times 2 \cdot 2 \times 2\cdot 1)}{(2i+1)\times (2i)\times \dots \times 2 \times 1} = \\ =2\sum_{i=0}^n \frac{i!}{(2i+1)!!}  
+	|pi|_n = \sum_{i=0}^n \frac{(i!)^2 {2^{i+1}}}{(2i+1)!} = 2\sum_{i=0}^n \frac{(i!) \times (i!){2^{i}}}{(2i+1)!}  =  2\sum_{i=0}^n \frac{i! \times ( \cancel{(2i)} \times \cancel{(2(i-1))} \times \dots \times 2 \cdot 2 \times 2\cdot 1)}{(2i+1)\times \cancel{(2i)} \times (2i-1) \times \cancel{(2(i-1))} \times \dots \times 2 \times 1} = \\ =2\sum_{i=0}^n \frac{i!}{(2i+1)!!}  
 \end{eqnarray*}
 
 onde $n!!$ é o fatorial duplo.
@@ -729,7 +730,7 @@ f(n+1) = f(n)+ g(n)
 \[
 g(n) = \frac{(i+1)!}{(2i+3)!!} = \frac{1}{3} \times \prod_{n=0}^{n-1} h(i) \implies \begin{cases}
 g(0) = \frac{1}{3} \\
-g(n+1) = g(n)\times t(n)
+g(n+1) = g(n)\times h(n)
 \end{cases}
 \]
 
@@ -747,21 +748,23 @@ Ao escrever as funções na forma \textit{point-free} e recorrendo ás regras de
 \begin{code}
 
 f.inNat = (either (const 1) (add)).(1 + split f g )
-g.inNat = (either (const (1/3)) (mul)).(1 + split g t )
-h.inNat = (either (const (2/5)) (calc)).(1 + t) where
+g.inNat = (either (const (1/3)) (mul)).(1 + split g h )
+h.inNat = (either (const (2/5)) (calc)).(1 + h) where
 	calc n = (n-1)/(4*n-3)
 	add (x,y) = x + y
 	mul (x,y) = x*y
 	
 \end{code}
 
+Em que |in = either (const 0) (suc)|. 
+
 Recorrendo à lei de absorção $+$ e $\times$ e com auxilío da função assocl, temos
 
 \begin{code}
 
-f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g t))
-g.inNat = (either (const (1/3)) (mul.snd)).(1 + split f (split g t))
-h.inNat = (either (const (2/5)) (calc.snd.snd)).(1 + split f (split g t)) where
+f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g h))
+g.inNat = (either (const (1/3)) (mul.snd)).(1 + split f (split g h))
+h.inNat = (either (const (2/5)) (calc.snd.snd)).(1 + split f (split g h)) where
 	calc n = (n-1)/(4*n-3)
 	add (x,y) = x + y
 	mul (x,y) = x*y
@@ -772,8 +775,8 @@ Podemos unir as equações numa só através do Eq-$\times$ e Fusão-$\times$. P
 
 \begin{code}
 
-f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g t))
-(split g h).inNat = (either (split (const (1/3)) (const (2/5))) (split (mul.snd) (calc.snd.snd)  )).(1 + split f (split g t)) where
+f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g h))
+(split g h).inNat = (either (split (const (1/3)) (const (2/5))) (split (mul.snd) (calc.snd.snd)  )).(1 + split f (split g h)) where
 	calc n = (n-1)/(4*n-3)
 	add (x,y) = x + y
 	mul (x,y) = x*y
@@ -817,7 +820,6 @@ loop = split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) ) where
 inic = const ((1,(1/3,2/5)))  
 
 wrapper = (2*).fst 
-
 
 \end{code}
 
