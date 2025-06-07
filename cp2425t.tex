@@ -646,108 +646,155 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
-Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista de candidatos para a resposta e um catamorfismo para obter o maior desses candidatos.
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista com as maiores áreas possíveis e um catamorfismo para obter a maior dessas áreas.
 
-Sejam $l$ uma lista não vazia de naturais. O primeiro candidato é dado por
-\[\text{min}(\text{head } l, \text{last } l) \times (\text{length } l - 1)\]
+Para fazer isto de forma otimal, começemos por calcular a área com base no primeiro e último elemento 
+de uma lista não vazia $l$.
 
-Para escolhermos o próximo candidato, temos dois casos:
-\begin{enumerate}
-	\item Se $\text{head } l \geq \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+Sendo assim, o cálculo da área é dado pela função: 
 
-	\item Se $\text{head } l < \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
-\end{enumerate}
-
-Além disso, podemos observar que reverter a lista é irrelevante para o resultado final. Portanto, podemos escrever a seguinte definição recursiva.
-
-\begin{eqnarray*}
-\start
-\ensuremath{\begin{lcbr}\Varid{g}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{g}\;\Varid{l}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\;\Varid{l}\end{lcbr}}
-\end{eqnarray*}
-
-onde:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{geq}\mathrel{=}\uncurry{(\geq )}{}\<[E]%
-\\
-\>[B]{}\Varid{len}\mathrel{=}\Varid{fromIntegral}\comp \length {}\<[E]%
-\\
-\>[B]{}\Varid{f}\mathrel{=}\conj{\Varid{mul}\comp (\Varid{id}\times\Varid{len})}{\p2}\comp (\Varid{head}\times\Varid{tail})\comp \Varid{diag}\comp (\mcond{\Varid{geq}\comp (\Varid{head}\times\Varid{last})\comp \Varid{diag}}{\Varid{reverse}}{\Varid{id}}){}\<[E]%
+\>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
-Portanto temos,
+A seguir, descartamos o menor elemento entre primeiro e último elemento da lista, de forma a encontrar um valor maior. Para isso temos dois casos:
+\begin{enumerate}
+	\item Se $\text{head } l \geq \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+
+	\item Se $\text{head } l < \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+\end{enumerate}
+
+Recursivamente, isto pode ser escrito como 
+
 \begin{eqnarray*}
 \start
-\ensuremath{\begin{lcbr}\Varid{g}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{g}\;\Varid{l}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\;\Varid{l}\end{lcbr}}
-\just\equiv{ definição pointwise }
-\ensuremath{\begin{lcbr}\Varid{g}\comp \Varid{nil}\mathrel{=}\mathbf{in}\;\\\Varid{g}\comp \Varid{id}\mathrel{=}\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}\end{lcbr}}
-\just\equiv{ definição de in, Eq-+ }
-\ensuremath{\Varid{g}\comp \mathsf{in}_{id}\mathrel{=}\alt{\;\mathbf{in}\;}{\;\mathbf{in}\comp (\Varid{id}\times\Varid{g})\comp \Varid{f}}}
-\just\equiv{ (33), Fusão-+ }
-\ensuremath{\Varid{g}\mathrel{=}\mathbf{in}\comp \alt{\Varid{id}}{(\Varid{id}\times\Varid{g})\comp \Varid{f}}\comp \mathsf{out}_{id}}
-\just\equiv{ Absorção-+ }
-\ensuremath{\Varid{g}\mathrel{=}\mathbf{in}\comp \alt{\Varid{id}}{\Varid{id}\times\Varid{g}}\comp (\Varid{id}\mathbin{+}\Varid{f})\comp \mathsf{out}_{id}}
-\just\equiv{ Universal-ana }
-\ensuremath{\Varid{g}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\Varid{f})\comp \mathsf{out}_{id}}}
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{bestAreas}\;\Varid{l}\mathrel{=}(\Varid{area}\;\Varid{l})\mathbin{:}(\mathbf{if}\;\Varid{head}\;\Varid{l}\mathbin{<}\Varid{last}\;\Varid{l}\;\mathbf{then}\;\Varid{bestAreas}\;(\Varid{tail}\;\Varid{l})\;\mathbf{else}\;\Varid{bestAreas}\;(\Varid{init}\;\Varid{l}))\end{lcbr}}
+\end{eqnarray*}
+
+Tornando esta definição point-free, temos
+
+\begin{eqnarray*}
+\start
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{bestAreas}\;\Varid{l}\mathrel{=}i_2\;(\Varid{area}\;\Varid{l})\mathbin{:}(\mathbf{if}\;\Varid{head}\;\Varid{l}\mathbin{<}\Varid{last}\;\Varid{l}\;\mathbf{then}\;\Varid{bestAreas}\;(\Varid{tail}\;\Varid{l})\;\mathbf{else}\;\Varid{bestAreas}\;(\Varid{init}\;\Varid{l}))\end{lcbr}}
+\just\equiv{ definição pointwise, 72, 73}
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\comp \Varid{nil}\mathrel{=}\Varid{nil}\\\Varid{bestAreas}\comp \Varid{id}\mathrel{=}\Varid{cons}\comp \conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;(\Varid{bestAreas}\comp \Varid{tail})\;(\Varid{bestAreas}\comp \Varid{init})}\end{lcbr}}
+\just\equiv{ 1ª Lei de fusão do condicional }
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\comp \Varid{nil}\mathrel{=}\Varid{nil}\\\Varid{bestAreas}\comp \Varid{id}\mathrel{=}\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}\end{lcbr}}
+\just\equiv{ Eq+, Fusão+}
+\ensuremath{\Varid{bestAreas}\comp \alt{\Varid{nil}}{\Varid{id}}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}}}
+\just\equiv{ definição do isomorfimo \ensuremath{\mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{id}}} e Absorção-+}
+\ensuremath{\Varid{bestAreas}\comp \mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})}
+\just\equiv{ isomorfimo \ensuremath{\mathsf{in}_{id}}/\ensuremath{\mathsf{out}_{id}} e definição do isomorfimo \ensuremath{\mathbf{in}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}}}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})\comp \mathsf{out}_{id}}
+\just\equiv{Absorção-x, funtor-+}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{bestAreas}))\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}
+\just\equiv{Universal-ana}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}}
 \qed
 \end{eqnarray*}
+
+Portanto, o \textit{divide} desse anamorfismo é \ensuremath{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{out}}.
+Resultando assim no diagrama do anamorfismo
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{\Varid{divide}}}}
+           \ar[r]_-{\ensuremath{\Varid{divide}}}
+&
+	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{bestAreas}}}
+\\
+     \ensuremath{{\N_0}^{*}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[l]^-{\ensuremath{\mathbf{in}}}
+}
+\end{eqnarray*}
+
 
 Além disso, já vimos nas aulas que o catamorfismo de listas
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{h}\mathrel{=}\llparenthesis\, \alt{\Varid{zero}}{\Varid{umax}}\,\rrparenthesis{}\<[E]%
+\>[B]{}\Varid{maxList}\mathrel{=}\llparenthesis\, \alt{\Varid{zero}}{\uncurry{\Varid{max}}}\,\rrparenthesis{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
-obtém o valor máximo numa lista de naturais.
+em que \ensuremath{\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}}}, é responsável por obter o maior valor numa lista de números não negativos,
+podendo ser representado pelo seguinte diagrama
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{maxList}\mathrel{=}\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
+           \ar[r]_-{\ensuremath{\Varid{out}}}
+&
+	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{maxList})}}
+\\
+    \ensuremath{\N_0}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\N_0\times\N_0}
+           \ar[l]^-{\ensuremath{\Varid{conquer}}}
+}
+\end{eqnarray*}
+
+Para evitar conflito entre os tipos \textit{Int} e \textit{Integer}, modificamos o conquer para 
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
 
 Portanto, temos
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \alt{\Varid{zero}}{\Varid{umax}},\,(\Varid{id}+\Varid{f})\comp \mathsf{out}_{id}\,\rrbracket{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-onde:
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \Varid{conquer},\,\Varid{divide}\,\rrbracket{}\<[E]%
+\\
+\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}{}\<[E]%
+\\
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
+\\
+\>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
+\\
 \>[B]{}\mathsf{out}_{id}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}i_1\;(){}\<[E]%
 \\
 \>[B]{}\mathsf{out}_{id}\;(\Varid{h}\mathbin{:}\Varid{t})\mathrel{=}i_2\;(\Varid{h}\mathbin{:}\Varid{t}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
-Ilustrado pelo seguinte diagrama:
+Com diagrama final 
 
 \begin{eqnarray*}
 \xymatrix{
-    \ensuremath{[\mskip1.5mu \N_0\mskip1.5mu]}
-           \ar[d]_-{\ensuremath{\ana{\Varid{g}}}}
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
            \ar[r]_-{\ensuremath{\mathsf{out}_{id}}}
 &
-    \ensuremath{\mathrm{1}\mathbin{+}[\mskip1.5mu \N_0\mskip1.5mu]}
-           \ar[r]_-{\ensuremath{\Varid{id}\mathbin{+}\Varid{f}}}
-& 
-	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times[\mskip1.5mu \N_0\mskip1.5mu]}
-           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\ana{\Varid{g}}}}
+    \ensuremath{\mathrm{1}\mathbin{+}(\N_0\times{\N_0}^{*})}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{divide})}}
 \\
-     \ensuremath{[\mskip1.5mu \N_0\mskip1.5mu]}
-           \ar[d]_-{\ensuremath{\llparenthesis\, \Varid{h}\,\rrparenthesis}}
-& &
-     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times[\mskip1.5mu \N_0\mskip1.5mu]}
-           \ar[ll]^-{\ensuremath{\mathbf{in}}}
-           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{h}}}
+     \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}(\N_0\times{\N_0}^{*})}
+           \ar[l]^-{\ensuremath{\mathbf{in}}}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{conquer}}}
 \\
      \ensuremath{\N_0}
-& &
+&
      \ensuremath{\mathrm{1}\mathbin{+}\N_0\times\N_0}
-           \ar[ll]^-{\ensuremath{\alt{\Varid{zero}}{\Varid{umax}}}}
+           \ar[l]^-{\ensuremath{\Varid{conquer}}}
 }
 \end{eqnarray*}
 

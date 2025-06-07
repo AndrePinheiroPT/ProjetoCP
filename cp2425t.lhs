@@ -501,119 +501,172 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
-Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista de candidatos para a resposta e um catamorfismo para obter o maior desses candidatos.
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista com as maiores áreas possíveis e um catamorfismo para obter a maior dessas áreas.
 
-Sejam $l$ uma lista não vazia de naturais. O primeiro candidato é dado por
-\[\text{min}(\text{head } l, \text{last } l) \times (\text{length } l - 1)\]
+Para fazer isto de forma otimal, começemos por calcular a área com base no primeiro e último elemento 
+de uma lista não vazia $l$.
 
-Para escolhermos o próximo candidato, temos dois casos:
+Sendo assim, o cálculo da área é dado pela função: 
+
+\begin{code}
+area l = (min (head l) (last l)) * ((length l) - 1)
+\end{code}
+
+A seguir, descartamos o menor elemento entre primeiro e último elemento da lista, de forma a encontrar um valor maior. Para isso temos dois casos:
 \begin{enumerate}
-	\item Se $\text{head } l \geq \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+	\item Se $\text{head } l \geq \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
 
-	\item Se $\text{head } l < \text{last } l$, então Isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+	\item Se $\text{head } l < \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
 \end{enumerate}
 
-Além disso, podemos observar que reverter a lista é irrelevante para o resultado final. Portanto, podemos escrever a seguinte definição recursiva.
+Recursivamente, isto pode ser escrito como 
 
 \begin{eqnarray*}
 \start
 |
 	 lcbr(
-          g [] = []
+          bestAreas [] = []
      )(
-          g l =  in.(id >< g).f l
-     )
+          bestAreas l = (area l):(if head l < last l then bestAreas (tail l) else bestAreas (init l)) 
+     )      
 |
 \end{eqnarray*}
 
-onde:
-\begin{code}
-geq = uncurry (>=)
-len = fromIntegral.length
-f = (split (mul.(id><len)) snd).(head >< tail).diag.((Cp.cond (geq.(head >< last).diag) reverse id))
-\end{code}
+Tornando esta definição point-free, temos
 
-Portanto temos,
 \begin{eqnarray*}
 \start
 |
 	 lcbr(
-          g [] = []
+          bestAreas [] = []
      )(
-          g l =  in.(id >< g).f l
-     )
+          bestAreas l = i2 (area l):(if head l < last l then bestAreas (tail l) else bestAreas (init l)) 
+     )    
 |
-\just\equiv{ definição pointwise }
+\just\equiv{ definição pointwise, 72, 73}
 |
 	 lcbr(
-          g.nil = in 
+        bestAreas.nil = nil
      )(
-          g.id =  in.(id >< g).f 
+        bestAreas.id = cons.(split area (cond (uncurry (<).(split head last)) (bestAreas.tail) (bestAreas.init))) 
      )
 |
-\just\equiv{ definição de in, Eq-+ }
+\just\equiv{ 1ª Lei de fusão do condicional }
 |
-	g . inid = either (in) (in.(id >< g).f)
+	 lcbr(
+        bestAreas.nil = nil
+     )(
+        bestAreas.id = cons.(split area (bestAreas.(cond (uncurry (<).(split head last)) tail init))) 
+     )
 |
-\just\equiv{ (33), Fusão-+ }
+\just\equiv{ Eq+, Fusão+}
 |
-	g = in.(either id ((id >< g).f)).outid
+    bestAreas.(either nil id) = (either (nil) (cons.(split area (bestAreas.(cond (uncurry (<).(split head last)) tail init)))))
 |
-\just\equiv{ Absorção-+ }
+\just\equiv{ definição do isomorfimo |inid = either nil id| e Absorção-+}
 |
-	g = in.(either id (id >< g)).(id + f).outid
+    bestAreas.inid = (either nil cons).(id + (split area (bestAreas.(cond (uncurry (<).(split head last)) tail init))))
 |
-\just\equiv{ Universal-ana }
+\just\equiv{ isomorfimo |inid|/|outid| e definição do isomorfimo |in = either nil cons|}
 |
-	g = ana ((id+f).outid)
+    bestAreas = in.(id + (split area (bestAreas.(cond (uncurry (<).(split head last)) tail init)))).outid
+|
+\just\equiv{Absorção-x, funtor-+}
+|
+    bestAreas = in.(id + (id >< bestAreas)).(id + (split area (cond (uncurry (<).(split head last)) tail init))).outid
+|
+\just\equiv{Universal-ana}
+|
+    bestAreas = ana ((id + (split area (cond (uncurry (<).(split head last)) tail init))).outid)
 |
 \qed
 \end{eqnarray*}
 
+Portanto, o \textit{divide} desse anamorfismo é |(id + (split area (cond (uncurry (<).(split head last)) tail init))).out|.
+Resultando assim no diagrama do anamorfismo
+
+\begin{eqnarray*}
+\xymatrix{
+    |Seq(Nat0)|
+           \ar[d]_-{|bestAreas = ana divide|}
+           \ar[r]_-{|divide|}
+&
+	|1 + Nat0 >< Seq(Nat0)|
+           \ar[d]^{|id + id >< bestAreas|}
+\\
+     |Seq(Nat0)|
+&
+     |1+Nat0 >< Seq(Nat0)|
+           \ar[l]^-{|in|}
+}
+\end{eqnarray*}
+
+
 Além disso, já vimos nas aulas que o catamorfismo de listas
 
 \begin{code}
-h = cata (either zero umax)
+maxList = cata (either zero (uncurry max))
 \end{code}
 
-obtém o valor máximo numa lista de naturais.
+em que |conquer = either zero (uncurry max)|, é responsável por obter o maior valor numa lista de números não negativos,
+podendo ser representado pelo seguinte diagrama
+
+\begin{eqnarray*}
+\xymatrix{
+    |Seq(Nat0)|
+           \ar[d]_-{|maxList = cata conquer|}
+           \ar[r]_-{|out|}
+&
+	|1 + Nat0 >< Seq(Nat0)|
+           \ar[d]^{|id + (id >< maxList)|}
+\\
+    |Nat0|
+&
+    |1+Nat0 >< Nat0|
+           \ar[l]^-{|conquer|}
+}
+\end{eqnarray*}
+
+Para evitar conflito entre os tipos \textit{Int} e \textit{Integer}, modificamos o conquer para 
+
+\begin{code}
+conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
+\end{code}
+
 
 Portanto, temos
 
 \begin{code}
-mostwater = hylo (either zero umax) ((id -|- f).outid)
-\end{code}
-onde:
-\begin{code}
+mostwater = hylo conquer divide
+divide = (id + (split area (cond (uncurry (<).(split head last)) tail init))).outid
+conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
+area l = (min (head l) (last l)) * ((length l) - 1)
 outid [] = i1 () 
 outid (h:t) = i2 (h:t)
 \end{code}
 
-Ilustrado pelo seguinte diagrama:
+Com diagrama final 
 
 \begin{eqnarray*}
 \xymatrix{
-    |[Nat0]|
-           \ar[d]_-{|ana g|}
+    |Seq(Nat0)|
+           \ar[d]_-{|ana divide|}
            \ar[r]_-{|outid|}
 &
-    |1 + [Nat0]|
-           \ar[r]_-{|id + f|}
-& 
-	|1 + Nat0 >< [Nat0]|
-           \ar[d]^{|id + id >< ana g|}
+    |1 + (Nat0 >< Seq(Nat0))|
+           \ar[d]^-{|id + (id >< divide)|}
 \\
-     |[Nat0]|
-           \ar[d]_-{|cata h|}
-& &
-     |1+Nat0 >< [Nat0]|
-           \ar[ll]^-{|in|}
-           \ar[d]^-{|id + id >< h|}
+     |Seq(Nat0)|
+           \ar[d]_-{|cata conquer|}
+&
+     |1+(Nat0 >< Seq(Nat0))|
+           \ar[l]^-{|in|}
+           \ar[d]^-{|id + id >< conquer|}
 \\
      |Nat0|
-& &
+&
      |1+Nat0 >< Nat0|
-           \ar[ll]^-{|either zero umax|}
+           \ar[l]^-{|conquer|}
 }
 \end{eqnarray*}
 
