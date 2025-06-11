@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.16)  7 JUN 2025 07:57
-=======
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.15)  3 JUN 2025 21:47
->>>>>>> f8f7fd3f592508ff22eaaf7b5ca8fffc51846455
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.4.16)  11 JUN 2025 14:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1483,15 +1479,11 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 
 \openout7 = `cp2425t.ptb'.
 
-<<<<<<< HEAD
 
 Overfull \hbox (28.65878pt too wide) in alignment at lines 985--987
  [][][] []
  []
 
-=======
- <xymatrix 1x4 150>
->>>>>>> f8f7fd3f592508ff22eaaf7b5ca8fffc51846455
 \openout7 = `cp2425t.ptb'.
 
 
@@ -1499,7 +1491,31 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  [][]| 
  []
 
-[10] <xymatrix 1x5 198>
+[10]
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[11] <xymatrix 1x4 150>
+\openout7 = `cp2425t.ptb'.
+
+ <xymatrix 1x5 198>
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[12]
 \openout7 = `cp2425t.ptb'.
 
 \openout7 = `cp2425t.ptb'.
@@ -1512,12 +1528,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  [][]| 
  []
 
-[11]
-Overfull \hbox (128.0374pt too wide) has occurred while \output is active
- [][]| 
- []
-
-[12] [13
+[13] [14
 
 
 ]) (./cp2425t.bbl
@@ -1530,7 +1541,7 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  [][]| 
  []
 
-[14
+[15
 
 ] (./cp2425t.aux)
  ***********
@@ -1545,23 +1556,13 @@ Package rerunfilecheck Info: File `cp2425t.out' has not changed.
 (rerunfilecheck)             Checksum: 5F452AB781E4B92AEB3757E0DDBE6DE1;1503.
  ) 
 Here is how much of TeX's memory you used:
-<<<<<<< HEAD
- 47857 strings out of 476106
- 1047479 string characters out of 5793933
+ 47867 strings out of 476106
+ 1047543 string characters out of 5793933
  1950975 words of memory out of 5000000
- 69152 multiletter control sequences out of 15000+600000
+ 69161 multiletter control sequences out of 15000+600000
  821352 words of font info for 161 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 99i,19n,101p,3290b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
-=======
- 47809 strings out of 476106
- 1046480 string characters out of 5793933
- 1946975 words of memory out of 5000000
- 69110 multiletter control sequences out of 15000+600000
- 820488 words of font info for 159 fonts, out of 8000000 for 9000
- 59 hyphenation exceptions out of 8191
- 99i,21n,101p,3281b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
->>>>>>> f8f7fd3f592508ff22eaaf7b5ca8fffc51846455
+ 99i,21n,101p,3290b,664s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 pdfTeX warning (dest): name{section.3.17} has been referenced but does not exis
 t, replaced by a fixed one
@@ -1575,7 +1576,6 @@ nts/type1/paratype/ptsans/PTS55F.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /ptsans/PTS75F.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-<<<<<<< HEAD
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
@@ -1586,24 +1586,10 @@ t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist
 fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /xypic/xybtip10.pfb>
-Output written on cp2425t.pdf (15 pages, 693335 bytes).
+Output written on cp2425t.pdf (16 pages, 697289 bytes).
 PDF statistics:
- 388 PDF objects out of 1000 (max. 8388607)
- 312 compressed objects within 4 object streams
-=======
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/xypic/xybtip10.pfb>
-Output written on cp2425t.pdf (15 pages, 679936 bytes).
-PDF statistics:
- 378 PDF objects out of 1000 (max. 8388607)
- 306 compressed objects within 4 object streams
->>>>>>> f8f7fd3f592508ff22eaaf7b5ca8fffc51846455
- 38 named destinations out of 1000 (max. 500000)
+ 392 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 39 named destinations out of 1000 (max. 500000)
  112 words of extra memory for PDF output out of 10000 (max. 10000000)
 
