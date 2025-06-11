@@ -61,6 +61,8 @@
 %format (cata (f)) = "\llparenthesis\, " f "\,\rrparenthesis"
 %format (cataNat (g)) = "\cataNat{" g "}"
 %format (cataList (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
+%format (cataListAcc (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
+%format (cataListAcc' (g)) = "\llparenthesis\, " g "\,\rrparenthesis"
 %format (cataLTree (x)) = "\llparenthesis\, " x "\,\rrparenthesis"
 %format (cataFTree (x)) = "\llparenthesis\, " x "\,\rrparenthesis"
 %format (cataRose (x)) = "\llparenthesis\, " x "\,\rrparenthesis_\textit{\tiny R}"
@@ -697,16 +699,388 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista com as maiores áreas possíveis e um catamorfismo para obter a maior dessas áreas.
+
+Para fazer isto de forma otimal, começemos por calcular a área com base no primeiro e último elemento 
+de uma lista não vazia $l$.
+
+Sendo assim, o cálculo da área é dado pela função: 
+
 \begin{code}
-mostwater = undefined
+area l = (min (head l) (last l)) * ((length l) - 1)
 \end{code}
+
+A seguir, descartamos o menor elemento entre primeiro e último elemento da lista, de forma a encontrar um valor maior. Para isso temos dois casos:
+\begin{enumerate}
+	\item Se $\text{head } l \geq \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+
+	\item Se $\text{head } l < \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+\end{enumerate}
+
+Recursivamente, isto pode ser escrito como 
+
+\begin{eqnarray*}
+\start
+|
+	 lcbr(
+          bestAreas [] = []
+     )(
+          bestAreas l = (area l):(if head l < last l then bestAreas (tail l) else bestAreas (init l)) 
+     )      
+|
+\end{eqnarray*}
+
+Tornando esta definição point-free, temos
+
+\begin{eqnarray*}
+\start
+|
+	 lcbr(
+          bestAreas [] = []
+     )(
+          bestAreas l = i2 (area l):(if head l < last l then bestAreas (tail l) else bestAreas (init l)) 
+     )    
+|
+\just\equiv{ definição pointwise, 72, 73}
+|
+	 lcbr(
+        bestAreas.nil = nil
+     )(
+        bestAreas.id = cons.(split area (cond (uncurry (<).(split head last)) (bestAreas.tail) (bestAreas.init))) 
+     )
+|
+\just\equiv{ 1ª Lei de fusão do condicional }
+|
+	 lcbr(
+        bestAreas.nil = nil
+     )(
+        bestAreas.id = cons.(split area (bestAreas.(cond (uncurry (<).(split head last)) tail init))) 
+     )
+|
+\just\equiv{ Eq+, Fusão+}
+|
+    bestAreas.(either nil id) = (either (nil) (cons.(split area (bestAreas.(cond (uncurry (<).(split head last)) tail init)))))
+|
+\just\equiv{ definição do isomorfimo |inid = either nil id| e Absorção-+}
+|
+    bestAreas.inid = (either nil cons).(id + (split area (bestAreas.(cond (uncurry (<).(split head last)) tail init))))
+|
+\just\equiv{ isomorfimo |inid|/|outid| e definição do isomorfimo |in = either nil cons|}
+|
+    bestAreas = in.(id + (split area (bestAreas.(cond (uncurry (<).(split head last)) tail init)))).outid
+|
+\just\equiv{Absorção-x, funtor-+}
+|
+    bestAreas = in.(id + (id >< bestAreas)).(id + (split area (cond (uncurry (<).(split head last)) tail init))).outid
+|
+\just\equiv{Universal-ana}
+|
+    bestAreas = ana ((id + (split area (cond (uncurry (<).(split head last)) tail init))).outid)
+|
+\qed
+\end{eqnarray*}
+
+Portanto, o \textit{divide} desse anamorfismo é |(id + (split area (cond (uncurry (<).(split head last)) tail init))).out|.
+Resultando assim no diagrama do anamorfismo
+
+\begin{eqnarray*}
+\xymatrix{
+    |Seq(Nat0)|
+           \ar[d]_-{|bestAreas = ana divide|}
+           \ar[r]_-{|divide|}
+&
+	|1 + Nat0 >< Seq(Nat0)|
+           \ar[d]^{|id + id >< bestAreas|}
+\\
+     |Seq(Nat0)|
+&
+     |1+Nat0 >< Seq(Nat0)|
+           \ar[l]^-{|in|}
+}
+\end{eqnarray*}
+
+
+Além disso, já vimos nas aulas que o catamorfismo de listas
+
+\begin{code}
+maxList = cata (either zero (uncurry max))
+\end{code}
+
+em que |conquer = either zero (uncurry max)|, é responsável por obter o maior valor numa lista de números não negativos,
+podendo ser representado pelo seguinte diagrama
+
+\begin{eqnarray*}
+\xymatrix{
+    |Seq(Nat0)|
+           \ar[d]_-{|maxList = cata conquer|}
+           \ar[r]_-{|out|}
+&
+	|1 + Nat0 >< Seq(Nat0)|
+           \ar[d]^{|id + (id >< maxList)|}
+\\
+    |Nat0|
+&
+    |1+Nat0 >< Nat0|
+           \ar[l]^-{|conquer|}
+}
+\end{eqnarray*}
+
+Para evitar conflito entre os tipos \textit{Int} e \textit{Integer}, modificamos o conquer para 
+
+\begin{code}
+conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
+\end{code}
+
+
+Portanto, temos
+
+\begin{code}
+mostwater = hylo conquer divide
+divide = (id + (split area (cond (uncurry (<).(split head last)) tail init))).outid
+conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
+area l = (min (head l) (last l)) * ((length l) - 1)
+outid [] = i1 () 
+outid (h:t) = i2 (h:t)
+\end{code}
+
+Com diagrama final 
+
+\begin{eqnarray*}
+\xymatrix{
+    |Seq(Nat0)|
+           \ar[d]_-{|ana divide|}
+           \ar[r]_-{|outid|}
+&
+    |1 + (Nat0 >< Seq(Nat0))|
+           \ar[d]^-{|id + (id >< divide)|}
+\\
+     |Seq(Nat0)|
+           \ar[d]_-{|cata conquer|}
+&
+     |1+(Nat0 >< Seq(Nat0))|
+           \ar[l]^-{|in|}
+           \ar[d]^-{|id + id >< conquer|}
+\\
+     |Nat0|
+&
+     |1+Nat0 >< Nat0|
+           \ar[l]^-{|conquer|}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 2}
 
-\begin{code}
-mapAccumRfilter p f = undefined
+Para este problema, iremos primeiro definir o mapAccumR, mapAccumL e o filter com catamorfismos.
 
-mapAccumLfilter p f = undefined
+|myMapAccumR :: ((a, s) -> (c, s)) -> ([a], s) -> ([c], s)|
+
+\noindent
+e seja:
+\begin{code}
+outListAcc ([], s)    = i1 ((), s)
+outListAcc ((a:x), s) = i2 (a,(x,s))
+cataListAcc g = g . recList (cataListAcc g) . outListAcc
+\end{code}
+O que resulta neste diagrama:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Seq (A) >< S|
+           \ar[d]_-{|myMapAccumR f|}
+           \ar[r]_-{|outListAcc|}
+&
+    |(1 >< S) + A >< (Seq (A) >< S)|
+           \ar[d]^{|id + id >< (myMapAccumR f)|}
+\\
+     |Seq (C) >< S|
+&
+     |(1 >< S) + A >< (Seq (C) >< S)|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+Falta apenas definir o gene deste catamorfismo.
+
+myMapAccumR f = |cataListAcc (either myMapAccumR1 (myMapAccumR2 f))|
+
+Seja o diagrama do |myMapAccumR1|:
+\begin{eqnarray*}
+\xymatrix@@C=3cm{
+     |1 >< S|
+           \ar[r]^-{|myMapAccumR1|}
+&
+     |Seq (C) >< S|
+}
+\end{eqnarray*}
+O caso base do |mapAccumR f ([],n) = ([],n)|, logo
+\begin{code}
+myMapAccumR1 = nil >< id
+\end{code}
+Para o |myMapAccumR2 f|, iremos resolver passo a passo 
+como está no diagrama a seguir
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+&
+     |A >< (Seq (C) >< S)|
+           \ar[dl]_-{|id >< p2|}
+           \ar[dd]_-{|split (f . (id >< p2)) (p1 . p2)|}
+           \ar[ddr]^-{|p1 . p2|} 
+\\
+     |A >< S|
+           \ar[d]_-{|f|}
+\\
+     |C >< S|
+&
+     |(C >< S) >< Seq (C)|
+           \ar[l]^-{|p1|}
+           \ar[d]_-{|zed = split (split (p1 . p1) p2) (p2 . p1)|}
+           \ar[r]_-{|p2|}
+&
+     |Seq (C)|
+\\ &
+     |(C >< Seq (C)) >< S|
+           \ar[d]_-{|cons >< id|}
+\\ &
+     |Seq (C) >< S|
+}
+\end{eqnarray*}
+assim:
+\begin{code}
+zed = split (split (p1 . p1) p2) (p2 . p1)
+myMapAccumR2 f = (cons >< id) . zed . split (f . (id >< p2)) (p1 . p2)
+\end{code}
+e tambem podemos definir |zed| como |zed = assocl . (id >< swap) . assocr| e
+|split (f . (id >< p2)) (p1 . p2)| como |(f >< id) . assocl . (id >< swap)|
+
+\noindent
+Com isto, resulta:
+\begin{code}
+myMapAccumR f = cataListAcc (either myMapAccumR1 (myMapAccumR2 f))
+\end{code}
+E fazer o mapAccumL é análogo, trocando o funtor assim:
+\begin{code}
+outListAcc' ([], s) = i1 ((), s)
+outListAcc' (x, s)  = i2 (last x, (init x, s))
+cataListAcc' g = g . recList (cataListAcc' g) . outListAcc'
+
+addToLast = uncurry (flip (++) . (singleton))
+
+myMapAccumL1 = nil >< id
+myMapAccumL2 f = (addToLast >< id) . zed . split (f . (id >< p2)) (p1 . p2)
+
+myMapAccumL f = cataListAcc' (either myMapAccumL1 (myMapAccumL2 f))
+\end{code}
+como estamos começar pelo fim, então também temos de começar a adicionar os
+elementos pelo fim.
+
+E segue-se o diagrama do |filter| e o seu catamorfismo:
+\begin{eqnarray*}
+\xymatrix@@C=4cm{
+    |Seq (A)|
+           \ar[d]_-{|myfilter p|}
+           \ar[r]^-{|outList|}
+&
+    |1 + A >< Seq(A)|
+           \ar[d]^{|id + (myfilter p)|}
+\\
+     |Seq(A)|
+&
+     |1 + A >< Seq(A)|
+           \ar[l]^-{|either nil (cond (p . p1) cons p2)|}
+}
+\end{eqnarray*}
+\begin{code}
+myfilter p = cataList (either nil (cond (p . p1) cons p2))
+\end{code}
+
+\newpage
+\noindent
+Agora podemos definir |mapAccumRfilter| e |mapAccumLfilter|
+inspirado nas as funções anteriores
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Seq (A) >< S|
+           \ar[d]_-{|mapAccumRfilter p f|}
+           \ar[r]_-{|outListAcc|}
+&
+    |(1 >< S) + A >< (Seq (A) >< S)|
+           \ar[d]^{|id + id >< (mapAccumRfilter p f)|}
+\\
+     |Seq (C) >< S|
+&
+     |(1 >< S) + A >< (Seq (C) >< S)|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+|mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))|
+
+\begin{code}
+mapAccumRfilter1 = nil >< id
+\end{code}
+
+
+e se detalhar mais o diagrama do filter |cond p f g = (either f g) . (grd p)|:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |1|
+           \ar[r]^-{|i1|}
+           \ar[dr]_-{|nil|}
+&
+     |1 + A >< Seq(A)|
+           \ar[d]^-{|either nil ((either cons p2) . (grd (p . p1)))|}
+&
+     |A >< Seq(A)|
+           \ar[l]_-{|i2|}
+           \ar[d]^-{|grd (p . p1)|}
+\\  & 
+     |Seq (A)|
+&
+     |A >< Seq(A) + A >< Seq(A)|
+          \ar[l]^-{|either cons p2|}
+}
+\end{eqnarray*}
+Podemos ver que a estrutura recursiva do filter é 
+|A >< Seq(A) + A >< Seq(A)|, 
+e se aplicarmos esta estrutura no nosso diagrama do mapAccumR2 obtemos o mapAccumRfilter2:
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+     |A >< (Seq (C) >< S)|
+           \ar[d]_-{|id >< swap|}
+\\
+     |A >< (S >< Seq (C))|
+           \ar[d]_-{|assocl|}
+\\
+     |(A >< S) >< Seq(C)|
+           \ar[d]_-{|grd (p . p1)|}
+\\
+     |((A >< S) >< Seq(C)) + ((A >< S) >< Seq(C))|
+           \ar[d]_-{|(f >< id) + (f >< id)|}
+\\
+     |((C >< S) >< Seq(C)) + ((C >< S) >< Seq(C))|
+           \ar[d]_-{|either ((cons >< id) . zed) (swap . (p2 >< id))|}
+\\
+     |Seq(C) >< S|
+}
+\end{eqnarray*}
+o que resulta
+
+\begin{code}
+mapAccumRfilter2 p f =
+     (either ((cons >< id) . zed) (swap . (p2 >< id))) . ((f >< id) -|- (f >< id)) . (grd (p . p1)) . assocl . (id >< swap)
+mapAccumRfilter p f = cataListAcc (either mapAccumRfilter1 (mapAccumRfilter2 p f))
+\end{code}
+
+\noindent
+e podemos ver que, |either ((cons >< id) . zed) (swap . (p2 >< id))| 
+e |either cons p2| são similares.
+
+\noindent
+Análogamente podemos fazer o |mapAccumLfilter|, com o mesmo funtor do
+|myMapAccumL|
+
+\begin{code}
+mapAccumLfilter1 = nil >< id
+mapAccumLfilter2 p f = 
+     (either ((addToLast >< id) . zed) (swap . (p2 >< id))) . ((f >< id) -|- (f >< id)) . (grd (p . p1)) . assocl . (id >< swap)
+mapAccumLfilter p f = cataListAcc' (either mapAccumLfilter1 (mapAccumLfilter2 p f))
 \end{code}
 
 \subsection*{Problema 3}

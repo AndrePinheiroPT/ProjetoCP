@@ -961,6 +961,7 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
+<<<<<<< HEAD
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -968,14 +969,418 @@ que sejam necessárias.
 \ColumnHook
 \end{hscode}\resethooks
 
-\subsection*{Problema 2}
+=======
+Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista com as maiores áreas possíveis e um catamorfismo para obter a maior dessas áreas.
+
+Para fazer isto de forma otimal, começemos por calcular a área com base no primeiro e último elemento 
+de uma lista não vazia $l$.
+
+Sendo assim, o cálculo da área é dado pela função: 
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{mapAccumRfilter}\;\Varid{p}\;\Varid{f}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+A seguir, descartamos o menor elemento entre primeiro e último elemento da lista, de forma a encontrar um valor maior. Para isso temos dois casos:
+\begin{enumerate}
+	\item Se $\text{head } l \geq \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{last} l$, por isso descartamos o $\text{last} l$. 
+
+	\item Se $\text{head } l < \text{last } l$, então isto significa que calculámos a água armazenada para o recipiente de altura $\text{head } l$, por isso descartamos o $\text{head } l$. 
+\end{enumerate}
+
+Recursivamente, isto pode ser escrito como 
+
+\begin{eqnarray*}
+\start
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{bestAreas}\;\Varid{l}\mathrel{=}(\Varid{area}\;\Varid{l})\mathbin{:}(\mathbf{if}\;\Varid{head}\;\Varid{l}\mathbin{<}\Varid{last}\;\Varid{l}\;\mathbf{then}\;\Varid{bestAreas}\;(\Varid{tail}\;\Varid{l})\;\mathbf{else}\;\Varid{bestAreas}\;(\Varid{init}\;\Varid{l}))\end{lcbr}}
+\end{eqnarray*}
+
+Tornando esta definição point-free, temos
+
+\begin{eqnarray*}
+\start
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]\\\Varid{bestAreas}\;\Varid{l}\mathrel{=}i_2\;(\Varid{area}\;\Varid{l})\mathbin{:}(\mathbf{if}\;\Varid{head}\;\Varid{l}\mathbin{<}\Varid{last}\;\Varid{l}\;\mathbf{then}\;\Varid{bestAreas}\;(\Varid{tail}\;\Varid{l})\;\mathbf{else}\;\Varid{bestAreas}\;(\Varid{init}\;\Varid{l}))\end{lcbr}}
+\just\equiv{ definição pointwise, 72, 73}
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\comp \Varid{nil}\mathrel{=}\Varid{nil}\\\Varid{bestAreas}\comp \Varid{id}\mathrel{=}\Varid{cons}\comp \conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;(\Varid{bestAreas}\comp \Varid{tail})\;(\Varid{bestAreas}\comp \Varid{init})}\end{lcbr}}
+\just\equiv{ 1ª Lei de fusão do condicional }
+\ensuremath{\begin{lcbr}\Varid{bestAreas}\comp \Varid{nil}\mathrel{=}\Varid{nil}\\\Varid{bestAreas}\comp \Varid{id}\mathrel{=}\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}\end{lcbr}}
+\just\equiv{ Eq+, Fusão+}
+\ensuremath{\Varid{bestAreas}\comp \alt{\Varid{nil}}{\Varid{id}}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}}}
+\just\equiv{ definição do isomorfimo \ensuremath{\mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{id}}} e Absorção-+}
+\ensuremath{\Varid{bestAreas}\comp \mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})}
+\just\equiv{ isomorfimo \ensuremath{\mathsf{in}_{id}}/\ensuremath{\mathsf{out}_{id}} e definição do isomorfimo \ensuremath{\mathbf{in}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}}}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})\comp \mathsf{out}_{id}}
+\just\equiv{Absorção-x, funtor-+}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{bestAreas}))\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}
+\just\equiv{Universal-ana}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}}
+\qed
+\end{eqnarray*}
+
+Portanto, o \textit{divide} desse anamorfismo é \ensuremath{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{out}}.
+Resultando assim no diagrama do anamorfismo
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{\Varid{divide}}}}
+           \ar[r]_-{\ensuremath{\Varid{divide}}}
+&
+	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{bestAreas}}}
+\\
+     \ensuremath{{\N_0}^{*}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[l]^-{\ensuremath{\mathbf{in}}}
+}
+\end{eqnarray*}
+
+
+Além disso, já vimos nas aulas que o catamorfismo de listas
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{maxList}\mathrel{=}\llparenthesis\, \alt{\Varid{zero}}{\uncurry{\Varid{max}}}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+em que \ensuremath{\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}}}, é responsável por obter o maior valor numa lista de números não negativos,
+podendo ser representado pelo seguinte diagrama
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{maxList}\mathrel{=}\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
+           \ar[r]_-{\ensuremath{\Varid{out}}}
+&
+	\ensuremath{\mathrm{1}\mathbin{+}\N_0\times{\N_0}^{*}}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{maxList})}}
+\\
+    \ensuremath{\N_0}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\N_0\times\N_0}
+           \ar[l]^-{\ensuremath{\Varid{conquer}}}
+}
+\end{eqnarray*}
+
+Para evitar conflito entre os tipos \textit{Int} e \textit{Integer}, modificamos o conquer para 
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+
+Portanto, temos
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \Varid{conquer},\,\Varid{divide}\,\rrbracket{}\<[E]%
+\\
+\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}{}\<[E]%
+\\
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
+\\
+\>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
+\\
+\>[B]{}\mathsf{out}_{id}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[B]{}\mathsf{out}_{id}\;(\Varid{h}\mathbin{:}\Varid{t})\mathrel{=}i_2\;(\Varid{h}\mathbin{:}\Varid{t}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+Com diagrama final 
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
+           \ar[r]_-{\ensuremath{\mathsf{out}_{id}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\N_0\times{\N_0}^{*})}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{divide})}}
+\\
+     \ensuremath{{\N_0}^{*}}
+           \ar[d]_-{\ensuremath{\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}(\N_0\times{\N_0}^{*})}
+           \ar[l]^-{\ensuremath{\mathbf{in}}}
+           \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{conquer}}}
+\\
+     \ensuremath{\N_0}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\N_0\times\N_0}
+           \ar[l]^-{\ensuremath{\Varid{conquer}}}
+}
+\end{eqnarray*}
+
+>>>>>>> 9358f80f35f19bb2905d715ccb834beb4ac48798
+\subsection*{Problema 2}
+
+Para este problema, iremos primeiro definir o mapAccumR, mapAccumL e o filter com catamorfismos.
+
+\ensuremath{\Varid{myMapAccumR}\mathbin{::}((\Varid{a},\Varid{s})\to (\Varid{c},\Varid{s}))\to ([\mskip1.5mu \Varid{a}\mskip1.5mu],\Varid{s})\to ([\mskip1.5mu \Varid{c}\mskip1.5mu],\Varid{s})}
+
+\noindent
+e seja:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{23}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{outListAcc}\;([\mskip1.5mu \mskip1.5mu],\Varid{s}){}\<[23]%
+\>[23]{}\mathrel{=}i_1\;((),\Varid{s}){}\<[E]%
+\\
+\>[B]{}\Varid{outListAcc}\;((\Varid{a}\mathbin{:}\Varid{x}),\Varid{s})\mathrel{=}i_2\;(\Varid{a},(\Varid{x},\Varid{s})){}\<[E]%
+\\
+\>[B]{}\llparenthesis\, \Varid{g}\,\rrparenthesis\mathrel{=}\Varid{g}\comp \Varid{recList}\;\llparenthesis\, \Varid{g}\,\rrparenthesis\comp \Varid{outListAcc}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+O que resulta neste diagrama:
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{{\Conid{A}}^{*}\times\Conid{S}}
+           \ar[d]_-{\ensuremath{\Varid{myMapAccumR}\;\Varid{f}}}
+           \ar[r]_-{\ensuremath{\Varid{outListAcc}}}
+&
+    \ensuremath{(\mathrm{1}\times\Conid{S})\mathbin{+}\Conid{A}\times({\Conid{A}}^{*}\times\Conid{S})}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times(\Varid{myMapAccumR}\;\Varid{f})}}
+\\
+     \ensuremath{{\Conid{C}}^{*}\times\Conid{S}}
+&
+     \ensuremath{(\mathrm{1}\times\Conid{S})\mathbin{+}\Conid{A}\times({\Conid{C}}^{*}\times\Conid{S})}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+Falta apenas definir o gene deste catamorfismo.
+
+myMapAccumR f = \ensuremath{\llparenthesis\, \alt{\Varid{myMapAccumR1}}{\Varid{myMapAccumR2}\;\Varid{f}}\,\rrparenthesis}
+
+Seja o diagrama do \ensuremath{\Varid{myMapAccumR1}}:
+\begin{eqnarray*}
+\xymatrix@C=3cm{
+     \ensuremath{\mathrm{1}\times\Conid{S}}
+           \ar[r]^-{\ensuremath{\Varid{myMapAccumR1}}}
+&
+     \ensuremath{{\Conid{C}}^{*}\times\Conid{S}}
+}
+\end{eqnarray*}
+O caso base do \ensuremath{\mapAccumR \;\Varid{f}\;([\mskip1.5mu \mskip1.5mu],\Varid{n})\mathrel{=}([\mskip1.5mu \mskip1.5mu],\Varid{n})}, logo
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{myMapAccumR1}\mathrel{=}\Varid{nil}\times\Varid{id}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Para o \ensuremath{\Varid{myMapAccumR2}\;\Varid{f}}, iremos resolver passo a passo 
+como está no diagrama a seguir
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+&
+     \ensuremath{\Conid{A}\times({\Conid{C}}^{*}\times\Conid{S})}
+           \ar[dl]_-{\ensuremath{\Varid{id}\times\p2}}
+           \ar[dd]_-{\ensuremath{\conj{\Varid{f}\comp (\Varid{id}\times\p2)}{\p1\comp \p2}}}
+           \ar[ddr]^-{\ensuremath{\p1\comp \p2}} 
+\\
+     \ensuremath{\Conid{A}\times\Conid{S}}
+           \ar[d]_-{\ensuremath{\Varid{f}}}
+\\
+     \ensuremath{\Conid{C}\times\Conid{S}}
+&
+     \ensuremath{(\Conid{C}\times\Conid{S})\times{\Conid{C}}^{*}}
+           \ar[l]^-{\ensuremath{\p1}}
+           \ar[d]_-{\ensuremath{\Varid{zed}\mathrel{=}\conj{\conj{\p1\comp \p1}{\p2}}{\p2\comp \p1}}}
+           \ar[r]_-{\ensuremath{\p2}}
+&
+     \ensuremath{{\Conid{C}}^{*}}
+\\ &
+     \ensuremath{(\Conid{C}\times{\Conid{C}}^{*})\times\Conid{S}}
+           \ar[d]_-{\ensuremath{\Varid{cons}\times\Varid{id}}}
+\\ &
+     \ensuremath{{\Conid{C}}^{*}\times\Conid{S}}
+}
+\end{eqnarray*}
+assim:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{zed}\mathrel{=}\conj{\conj{\p1\comp \p1}{\p2}}{\p2\comp \p1}{}\<[E]%
+\\
+\>[B]{}\Varid{myMapAccumR2}\;\Varid{f}\mathrel{=}(\Varid{cons}\times\Varid{id})\comp \Varid{zed}\comp \conj{\Varid{f}\comp (\Varid{id}\times\p2)}{\p1\comp \p2}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+e tambem podemos definir \ensuremath{\Varid{zed}} como \ensuremath{\Varid{zed}\mathrel{=}\Varid{assocl}\comp (\Varid{id}\times\Varid{swap})\comp \Varid{assocr}} e
+\ensuremath{\conj{\Varid{f}\comp (\Varid{id}\times\p2)}{\p1\comp \p2}} como \ensuremath{(\Varid{f}\times\Varid{id})\comp \Varid{assocl}\comp (\Varid{id}\times\Varid{swap})}
+
+\noindent
+Com isto, resulta:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{myMapAccumR}\;\Varid{f}\mathrel{=}\llparenthesis\, \alt{\Varid{myMapAccumR1}}{\Varid{myMapAccumR2}\;\Varid{f}}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+E fazer o mapAccumL é análogo, trocando o funtor assim:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{outListAcc'}\;([\mskip1.5mu \mskip1.5mu],\Varid{s})\mathrel{=}i_1\;((),\Varid{s}){}\<[E]%
+\\
+\>[B]{}\Varid{outListAcc'}\;(\Varid{x},\Varid{s}){}\<[21]%
+\>[21]{}\mathrel{=}i_2\;(\Varid{last}\;\Varid{x},(\Varid{init}\;\Varid{x},\Varid{s})){}\<[E]%
+\\
+\>[B]{}\llparenthesis\, \Varid{g}\,\rrparenthesis\mathrel{=}\Varid{g}\comp \Varid{recList}\;\llparenthesis\, \Varid{g}\,\rrparenthesis\comp \Varid{outListAcc'}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{mapAccumLfilter}\;\Varid{p}\;\Varid{f}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{addToLast}\mathrel{=}\uncurry{(\Varid{flip}\;(\mathbin{+\!\!+})\comp (\Varid{singleton}))}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{myMapAccumL1}\mathrel{=}\Varid{nil}\times\Varid{id}{}\<[E]%
+\\
+\>[B]{}\Varid{myMapAccumL2}\;\Varid{f}\mathrel{=}(\Varid{addToLast}\times\Varid{id})\comp \Varid{zed}\comp \conj{\Varid{f}\comp (\Varid{id}\times\p2)}{\p1\comp \p2}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{myMapAccumL}\;\Varid{f}\mathrel{=}\llparenthesis\, \alt{\Varid{myMapAccumL1}}{\Varid{myMapAccumL2}\;\Varid{f}}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+como estamos começar pelo fim, então também temos de começar a adicionar os
+elementos pelo fim.
+
+E segue-se o diagrama do \ensuremath{\Varid{filter}} e o seu catamorfismo:
+\begin{eqnarray*}
+\xymatrix@C=4cm{
+    \ensuremath{{\Conid{A}}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{myfilter}\;\Varid{p}}}
+           \ar[r]^-{\ensuremath{\Varid{outList}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\Conid{A}\times{\Conid{A}}^{*}}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{myfilter}\;\Varid{p})}}
+\\
+     \ensuremath{{\Conid{A}}^{*}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\Conid{A}\times{\Conid{A}}^{*}}
+           \ar[l]^-{\ensuremath{\alt{\Varid{nil}}{\Varid{cond}\;(\Varid{p}\comp \p1)\;\Varid{cons}\;\p2}}}
+}
+\end{eqnarray*}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{myfilter}\;\Varid{p}\mathrel{=}\llparenthesis\, \alt{\Varid{nil}}{\Varid{cond}\;(\Varid{p}\comp \p1)\;\Varid{cons}\;\p2}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\newpage
+\noindent
+Agora podemos definir \ensuremath{\Varid{mapAccumRfilter}} e \ensuremath{\Varid{mapAccumLfilter}}
+inspirado nas as funções anteriores
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{{\Conid{A}}^{*}\times\Conid{S}}
+           \ar[d]_-{\ensuremath{\Varid{mapAccumRfilter}\;\Varid{p}\;\Varid{f}}}
+           \ar[r]_-{\ensuremath{\Varid{outListAcc}}}
+&
+    \ensuremath{(\mathrm{1}\times\Conid{S})\mathbin{+}\Conid{A}\times({\Conid{A}}^{*}\times\Conid{S})}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times(\Varid{mapAccumRfilter}\;\Varid{p}\;\Varid{f})}}
+\\
+     \ensuremath{{\Conid{C}}^{*}\times\Conid{S}}
+&
+     \ensuremath{(\mathrm{1}\times\Conid{S})\mathbin{+}\Conid{A}\times({\Conid{C}}^{*}\times\Conid{S})}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+\ensuremath{\Varid{mapAccumRfilter}\;\Varid{p}\;\Varid{f}\mathrel{=}\llparenthesis\, \alt{\Varid{mapAccumRfilter1}}{\Varid{mapAccumRfilter2}\;\Varid{p}\;\Varid{f}}\,\rrparenthesis}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mapAccumRfilter1}\mathrel{=}\Varid{nil}\times\Varid{id}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+
+e se detalhar mais o diagrama do filter \ensuremath{\Varid{cond}\;\Varid{p}\;\Varid{f}\;\Varid{g}\mathrel{=}\alt{\Varid{f}}{\Varid{g}}\comp (\Varid{grd}\;\Varid{p})}:
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+     \ensuremath{\mathrm{1}}
+           \ar[r]^-{\ensuremath{i_1}}
+           \ar[dr]_-{\ensuremath{\Varid{nil}}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\Conid{A}\times{\Conid{A}}^{*}}
+           \ar[d]^-{\ensuremath{\alt{\Varid{nil}}{\alt{\Varid{cons}}{\p2}\comp (\Varid{grd}\;(\Varid{p}\comp \p1))}}}
+&
+     \ensuremath{\Conid{A}\times{\Conid{A}}^{*}}
+           \ar[l]_-{\ensuremath{i_2}}
+           \ar[d]^-{\ensuremath{\Varid{grd}\;(\Varid{p}\comp \p1)}}
+\\  & 
+     \ensuremath{{\Conid{A}}^{*}}
+&
+     \ensuremath{\Conid{A}\times{\Conid{A}}^{*}\mathbin{+}\Conid{A}\times{\Conid{A}}^{*}}
+          \ar[l]^-{\ensuremath{\alt{\Varid{cons}}{\p2}}}
+}
+\end{eqnarray*}
+Podemos ver que a estrutura recursiva do filter é 
+\ensuremath{\Conid{A}\times{\Conid{A}}^{*}\mathbin{+}\Conid{A}\times{\Conid{A}}^{*}}, 
+e se aplicarmos esta estrutura no nosso diagrama do mapAccumR2 obtemos o mapAccumRfilter2:
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+     \ensuremath{\Conid{A}\times({\Conid{C}}^{*}\times\Conid{S})}
+           \ar[d]_-{\ensuremath{\Varid{id}\times\Varid{swap}}}
+\\
+     \ensuremath{\Conid{A}\times(\Conid{S}\times{\Conid{C}}^{*})}
+           \ar[d]_-{\ensuremath{\Varid{assocl}}}
+\\
+     \ensuremath{(\Conid{A}\times\Conid{S})\times{\Conid{C}}^{*}}
+           \ar[d]_-{\ensuremath{\Varid{grd}\;(\Varid{p}\comp \p1)}}
+\\
+     \ensuremath{((\Conid{A}\times\Conid{S})\times{\Conid{C}}^{*})\mathbin{+}((\Conid{A}\times\Conid{S})\times{\Conid{C}}^{*})}
+           \ar[d]_-{\ensuremath{(\Varid{f}\times\Varid{id})\mathbin{+}(\Varid{f}\times\Varid{id})}}
+\\
+     \ensuremath{((\Conid{C}\times\Conid{S})\times{\Conid{C}}^{*})\mathbin{+}((\Conid{C}\times\Conid{S})\times{\Conid{C}}^{*})}
+           \ar[d]_-{\ensuremath{\alt{(\Varid{cons}\times\Varid{id})\comp \Varid{zed}}{\Varid{swap}\comp (\p2\times\Varid{id})}}}
+\\
+     \ensuremath{{\Conid{C}}^{*}\times\Conid{S}}
+}
+\end{eqnarray*}
+o que resulta
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mapAccumRfilter2}\;\Varid{p}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\alt{(\Varid{cons}\times\Varid{id})\comp \Varid{zed}}{\Varid{swap}\comp (\p2\times\Varid{id})}\comp ((\Varid{f}\times\Varid{id})+(\Varid{f}\times\Varid{id}))\comp (\Varid{grd}\;(\Varid{p}\comp \p1))\comp \Varid{assocl}\comp (\Varid{id}\times\Varid{swap}){}\<[E]%
+\\
+\>[B]{}\Varid{mapAccumRfilter}\;\Varid{p}\;\Varid{f}\mathrel{=}\llparenthesis\, \alt{\Varid{mapAccumRfilter1}}{\Varid{mapAccumRfilter2}\;\Varid{p}\;\Varid{f}}\,\rrparenthesis{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\noindent
+e podemos ver que, \ensuremath{\alt{(\Varid{cons}\times\Varid{id})\comp \Varid{zed}}{\Varid{swap}\comp (\p2\times\Varid{id})}} 
+e \ensuremath{\alt{\Varid{cons}}{\p2}} são similares.
+
+\noindent
+Análogamente podemos fazer o \ensuremath{\Varid{mapAccumLfilter}}, com o mesmo funtor do
+\ensuremath{\Varid{myMapAccumL}}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mapAccumLfilter1}\mathrel{=}\Varid{nil}\times\Varid{id}{}\<[E]%
+\\
+\>[B]{}\Varid{mapAccumLfilter2}\;\Varid{p}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\alt{(\Varid{addToLast}\times\Varid{id})\comp \Varid{zed}}{\Varid{swap}\comp (\p2\times\Varid{id})}\comp ((\Varid{f}\times\Varid{id})+(\Varid{f}\times\Varid{id}))\comp (\Varid{grd}\;(\Varid{p}\comp \p1))\comp \Varid{assocl}\comp (\Varid{id}\times\Varid{swap}){}\<[E]%
+\\
+\>[B]{}\Varid{mapAccumLfilter}\;\Varid{p}\;\Varid{f}\mathrel{=}\llparenthesis\, \alt{\Varid{mapAccumLfilter1}}{\Varid{mapAccumLfilter2}\;\Varid{p}\;\Varid{f}}\,\rrparenthesis{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
