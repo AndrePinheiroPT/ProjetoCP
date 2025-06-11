@@ -706,9 +706,9 @@ de uma lista não vazia $l$.
 
 Sendo assim, o cálculo da área é dado pela função: 
 
-\begin{code}
+\begin{spec}
 area l = (min (head l) (last l)) * ((length l) - 1)
-\end{code}
+\end{spec}
 
 A seguir, descartamos o menor elemento entre primeiro e último elemento da lista, de forma a encontrar um valor maior. Para isso temos dois casos:
 \begin{enumerate}
@@ -802,9 +802,9 @@ Resultando assim no diagrama do anamorfismo
 
 Além disso, já vimos nas aulas que o catamorfismo de listas
 
-\begin{code}
+\begin{spec}
 maxList = cata (either zero (uncurry max))
-\end{code}
+\end{spec}
 
 em que |conquer = either zero (uncurry max)|, é responsável por obter o maior valor numa lista de números não negativos,
 podendo ser representado pelo seguinte diagrama
@@ -827,17 +827,17 @@ podendo ser representado pelo seguinte diagrama
 
 Para evitar conflito entre os tipos \textit{Int} e \textit{Integer}, modificamos o conquer para 
 
-\begin{code}
+\begin{spec}
 conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
-\end{code}
+\end{spec}
 
 
 Portanto, temos
 
 \begin{code}
-mostwater = hylo conquer divide
-divide = (id + (split area (cond (uncurry (<).(split head last)) tail init))).outid
-conquer = (either zero ((uncurry max).(fromIntegral >< fromIntegral))) 
+mostwater = hyloList conquer divide
+divide = (id -|- (split area (cond (uncurry (<).(split head last)) tail init))).outid
+conquer = (either (const 0) ((uncurry max).(fromIntegral >< fromIntegral))) 
 area l = (min (head l) (last l)) * ((length l) - 1)
 outid [] = i1 () 
 outid (h:t) = i2 (h:t)
@@ -961,7 +961,7 @@ outListAcc' ([], s) = i1 ((), s)
 outListAcc' (x, s)  = i2 (last x, (init x, s))
 cataListAcc' g = g . recList (cataListAcc' g) . outListAcc'
 
-addToLast = uncurry (flip (++) . (singleton))
+addToLast = uncurry (flip (++) . (singl))
 
 myMapAccumL1 = nil >< id
 myMapAccumL2 f = (addToLast >< id) . zed . split (f . (id >< p2)) (p1 . p2)
@@ -1119,7 +1119,7 @@ h(n+1) = \frac{n+3}{2n+7} = \frac{\frac{n+2}{2n+5} - 1  }{ 4 \frac{n+2}{2n+5} -3
 
 Ao escrever as funções na forma \textit{point-free} e recorrendo ás regras de cálculo usuais, tem-se
 
-\begin{code}
+\begin{spec}
 
 f.inNat = (either (const 1) (add)).(1 + split f g )
 g.inNat = (either (const (1/3)) (mul)).(1 + split g h )
@@ -1128,13 +1128,13 @@ h.inNat = (either (const (2/5)) (calc)).(1 + h) where
 	add (x,y) = x + y
 	mul (x,y) = x*y
 	
-\end{code}
+\end{spec}
 
 Em que |in = either (const 0) (suc)|. 
 
 Recorrendo à lei de absorção $+$ e $\times$ e com auxilío da função assocl, temos
 
-\begin{code}
+\begin{spec}
 
 f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g h))
 g.inNat = (either (const (1/3)) (mul.snd)).(1 + split f (split g h))
@@ -1143,11 +1143,11 @@ h.inNat = (either (const (2/5)) (calc.snd.snd)).(1 + split f (split g h)) where
 	add (x,y) = x + y
 	mul (x,y) = x*y
 	
-\end{code}
+\end{spec}
 
 Podemos unir as equações numa só através do Eq-$\times$ e Fusão-$\times$. Portanto, unindo as duas últimas equações e em seguida aplicando a lei da troca, temos 
 
-\begin{code}
+\begin{spec}
 
 f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g h))
 (split g h).inNat = (either (split (const (1/3)) (const (2/5))) (split (mul.snd) (calc.snd.snd)  )).(1 + split f (split g h)) where
@@ -1155,22 +1155,22 @@ f.inNat = (either (const 1) (add.fst.assocl)).(1 + split f (split g h))
 	add (x,y) = x + y
 	mul (x,y) = x*y
 	
-\end{code}
+\end{spec}
 
 Repetindo o mesmo raciocínio de forma análoga, tem-se por fim
 
-\begin{code}
+\begin{spec}
 
 (split f (split g h)).inNat = (either (const ((1,(1/3,2/5)))) (split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) ))).(1 + split f (split g t)) where
 	calc n = (n-1)/(4*n-3)
 	add (x,y) = x + y
 	mul (x,y) = x*y
 	
-\end{code}
+\end{spec}
 
 Ora, pela lei de universal-cata, tem-se que a função |split f (split g h)| é da forma |for loop inic|. Portanto, se |worker = split f (split g h)|, tem-se
 
-\begin{code}
+\begin{spec}
 
 worker = for loop inic
 loop = split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) )
@@ -1178,7 +1178,7 @@ inic = const ((1,(1/3,2/5))) where
 	calc n = (n-1)/(4*n-3)
 	add (x,y) = x + y
 	mul (x,y) = x*y
-\end{code} 
+\end{spec} 
 
 Finalmente, como |piloop = (2*).fst.(split f (split g h))|, temos 
 \begin{code}
@@ -1187,11 +1187,11 @@ piloop = wrapper . worker
 worker = for loop inic 
 
 loop = split (add.fst.assocl) (split (mul.snd) (calc.snd.snd) ) where 
-	calc n = (n-1)/(4*n-3)
-	add (x,y) = x + y
-	mul (x,y) = x*y
+     calc n = (n-1)/(4*n-3)
+     add (x,y) = x + y
+     mul (x,y) = x*y
 
-inic = const ((1,(1/3,2/5)))  
+inic = (1,(1/3,2/5)) 
 
 wrapper = (2*).fst 
 

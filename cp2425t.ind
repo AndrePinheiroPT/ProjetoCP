@@ -1,0 +1,67 @@
+\begin{theindex}
+
+  \item \LaTeX  , \hyperpage{5}
+    \subitem \texttt  {bibtex}, \hyperpage{6}
+    \subitem \texttt  {lhs2TeX}, \hyperpage{5, 6}
+    \subitem \texttt  {makeindex}, \hyperpage{6}
+    \subitem \texttt  {pdflatex}, \hyperpage{5}
+    \subitem \texttt  {xymatrix}, \hyperpage{6}
+
+  \indexspace
+
+  \item Combinador ``pointfree''
+    \subitem \emph  {ana}, \hyperpage{11, 12}
+    \subitem \emph  {cata}
+      \subsubitem Naturais, \hyperpage{6}
+    \subitem \emph  {either}, \hyperpage{10--16}
+    \subitem \emph  {mapAccumL}, \hyperpage{2}
+    \subitem \emph  {mapAccumR}, \hyperpage{2}, \hyperpage{12}
+    \subitem \emph  {split}, \hyperpage{6}, \hyperpage{10--13}, 
+		\hyperpage{15, 16}
+  \item Cálculo de Programas, \hyperpage{1}, \hyperpage{4}, 
+		\hyperpage{6}
+    \subitem Material Pedagógico, \hyperpage{4}
+
+  \indexspace
+
+  \item Docker, \hyperpage{5}
+    \subitem container, \hyperpage{5, 6}
+
+  \indexspace
+
+  \item Functor, \hyperpage{6}
+  \item Função
+    \subitem $\pi _1$, \hyperpage{6--8}, \hyperpage{12--16}
+    \subitem $\pi _2$, \hyperpage{6}, \hyperpage{9}, \hyperpage{12--16}
+    \subitem \emph  {for}, \hyperpage{2}, \hyperpage{7}, \hyperpage{16}
+    \subitem \emph  {length}, \hyperpage{10, 11}
+    \subitem \emph  {map}, \hyperpage{8, 9}, \hyperpage{16, 17}
+    \subitem \emph  {uncurry}, \hyperpage{10, 11}, \hyperpage{13}, 
+		\hyperpage{17}
+
+  \indexspace
+
+  \item Haskell, \hyperpage{1--6}
+    \subitem Hackage
+      \subsubitem Data.Matrix, \hyperpage{2}
+    \subitem interpretador
+      \subsubitem GHCi, \hyperpage{5}, \hyperpage{9}
+    \subitem Literate Haskell, \hyperpage{4}
+
+  \indexspace
+
+  \item Números naturais ($\mathbb  {N}$), \hyperpage{2}, 
+		\hyperpage{6, 7}, \hyperpage{11, 12}
+
+  \indexspace
+
+  \item Programação
+    \subitem dinâmica, \hyperpage{6}
+    \subitem literária, \hyperpage{4}, \hyperpage{6}
+
+  \indexspace
+
+  \item Rede neuronal, \hyperpage{2}
+    \subitem RNN, \hyperpage{2, 3}
+
+\end{theindex}

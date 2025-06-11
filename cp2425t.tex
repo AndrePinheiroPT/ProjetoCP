@@ -1074,11 +1074,11 @@ Portanto, temos
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \Varid{conquer},\,\Varid{divide}\,\rrbracket{}\<[E]%
+\>[B]{}\Varid{mostwater}\mathrel{=}\Varid{hyloList}\;\Varid{conquer}\;\Varid{divide}{}\<[E]%
 \\
-\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{outid}{}\<[E]%
+\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}+\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{outid}{}\<[E]%
 \\
-\>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\underline{\mathrm{0}}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
 \\
 \>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
 \\
@@ -1229,7 +1229,7 @@ E fazer o mapAccumL é análogo, trocando o funtor assim:
 \\
 \>[B]{}\llparenthesis\, \Varid{g}\,\rrparenthesis\mathrel{=}\Varid{g}\comp \Varid{recList}\;\llparenthesis\, \Varid{g}\,\rrparenthesis\comp \Varid{outListAcc'}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{addToLast}\mathrel{=}\uncurry{(\Varid{flip}\;(\mathbin{+\!\!+})\comp (\Varid{singleton}))}{}\<[E]%
+\>[B]{}\Varid{addToLast}\mathrel{=}\uncurry{(\Varid{flip}\;(\mathbin{+\!\!+})\comp (\Varid{singl}))}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{myMapAccumL1}\mathrel{=}\Varid{nil}\times\Varid{id}{}\<[E]%
 \\
@@ -1524,7 +1524,7 @@ Ora, pela lei de universal-cata, tem-se que a função \ensuremath{\conj{\Varid{
 Finalmente, como \ensuremath{\pi_{\mathit{loop}}\mathrel{=}(\mathrm{2}\mathbin{*})\comp \p1\comp \conj{\Varid{f}}{\conj{\Varid{g}}{\Varid{h}}}}, temos 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\pi_{\mathit{loop}}\mathrel{=}\Varid{wrapper}\comp \Varid{worker}{}\<[E]%
 \\[\blanklineskip]%
@@ -1532,16 +1532,16 @@ Finalmente, como \ensuremath{\pi_{\mathit{loop}}\mathrel{=}(\mathrm{2}\mathbin{*
 \\[\blanklineskip]%
 \>[B]{}\Varid{loop}\mathrel{=}\conj{\Varid{add}\comp \p1\comp \Varid{assocl}}{\conj{\Varid{mul}\comp \p2}{\Varid{calc}\comp \p2\comp \p2}}\;\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\hsindent{9}{}\<[9]%
-\>[9]{}\Varid{calc}\;\Varid{n}\mathrel{=}(\Varid{n}\mathbin{-}\mathrm{1})\mathbin{/}(\mathrm{4}\mathbin{*}\Varid{n}\mathbin{-}\mathrm{3}){}\<[E]%
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\Varid{calc}\;\Varid{n}\mathrel{=}(\Varid{n}\mathbin{-}\mathrm{1})\mathbin{/}(\mathrm{4}\mathbin{*}\Varid{n}\mathbin{-}\mathrm{3}){}\<[E]%
 \\
-\>[B]{}\hsindent{9}{}\<[9]%
-\>[9]{}\Varid{add}\;(\Varid{x},\Varid{y})\mathrel{=}\Varid{x}\mathbin{+}\Varid{y}{}\<[E]%
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\Varid{add}\;(\Varid{x},\Varid{y})\mathrel{=}\Varid{x}\mathbin{+}\Varid{y}{}\<[E]%
 \\
-\>[B]{}\hsindent{9}{}\<[9]%
-\>[9]{}\Varid{mul}\;(\Varid{x},\Varid{y})\mathrel{=}\Varid{x}\mathbin{*}\Varid{y}{}\<[E]%
+\>[B]{}\hsindent{6}{}\<[6]%
+\>[6]{}\Varid{mul}\;(\Varid{x},\Varid{y})\mathrel{=}\Varid{x}\mathbin{*}\Varid{y}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{inic}\mathrel{=}\underline{(\mathrm{1},(\mathrm{1}\mathbin{/}\mathrm{3},\mathrm{2}\mathbin{/}\mathrm{5}))}{}\<[E]%
+\>[B]{}\Varid{inic}\mathrel{=}(\mathrm{1},(\mathrm{1}\mathbin{/}\mathrm{3},\mathrm{2}\mathbin{/}\mathrm{5})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{wrapper}\mathrel{=}(\mathrm{2}\mathbin{*})\comp \p1{}\<[E]%
 \ColumnHook
