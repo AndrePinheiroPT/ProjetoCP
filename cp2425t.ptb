@@ -4,16 +4,7 @@
 \def\PTtemp{4}\empty
 \def\PTtemp{E}\empty
 \def\PTtemp{E}\empty
-<<<<<<< HEAD
 \def\PTtemp{4}\empty
-=======
-\def\PTtemp{6}\empty
-\def\PTtemp{E}\empty
-\def\PTtemp{E}\empty
-\def\PTtemp{E}\empty
-\def\PTtemp{E}\empty
-\def\PTtemp{6}\empty
->>>>>>> 9358f80f35f19bb2905d715ccb834beb4ac48798
 \def\PTtemp{E}\empty
 \def\PTtemp{4}\empty
 \def\PTtemp{E}\empty

@@ -144,10 +144,10 @@
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\group{G15}
+\studentA{108473}{André Filipe Dourado Pinheiro}
+\studentB{105532}{Killian Alexandre Ferreira Oliveira}
+\studentC{108398}{Pedro Dong Mo}
 
 %==============================================================================%
 

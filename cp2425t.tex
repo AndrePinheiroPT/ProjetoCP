@@ -269,10 +269,10 @@
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\group{G15}
+\studentA{108473}{André Filipe Dourado Pinheiro}
+\studentB{105532}{Killian Alexandre Ferreira Oliveira}
+\studentC{108398}{Pedro Dong Mo}
 
 %==============================================================================%
 
@@ -961,15 +961,6 @@ que sejam necessárias.
 
 \subsection*{Problema 1}
 
-<<<<<<< HEAD
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{mostwater}\mathrel{=}\bot {}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-=======
 Vamos utilizar a estratégia de \textit{divide and conquer}, isto é, vamos construir um anamorfismo que devolve uma lista com as maiores áreas possíveis e um catamorfismo para obter a maior dessas áreas.
 
 Para fazer isto de forma otimal, começemos por calcular a área com base no primeiro e último elemento 
@@ -1009,14 +1000,14 @@ Tornando esta definição point-free, temos
 \ensuremath{\begin{lcbr}\Varid{bestAreas}\comp \Varid{nil}\mathrel{=}\Varid{nil}\\\Varid{bestAreas}\comp \Varid{id}\mathrel{=}\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}\end{lcbr}}
 \just\equiv{ Eq+, Fusão+}
 \ensuremath{\Varid{bestAreas}\comp \alt{\Varid{nil}}{\Varid{id}}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}\comp \conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})}}}
-\just\equiv{ definição do isomorfimo \ensuremath{\mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{id}}} e Absorção-+}
-\ensuremath{\Varid{bestAreas}\comp \mathsf{in}_{id}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})}
-\just\equiv{ isomorfimo \ensuremath{\mathsf{in}_{id}}/\ensuremath{\mathsf{out}_{id}} e definição do isomorfimo \ensuremath{\mathbf{in}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}}}
-\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})\comp \mathsf{out}_{id}}
+\just\equiv{ definição do isomorfimo \ensuremath{\Varid{inid}\mathrel{=}\alt{\Varid{nil}}{\Varid{id}}} e Absorção-+}
+\ensuremath{\Varid{bestAreas}\comp \Varid{inid}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})}
+\just\equiv{ isomorfimo \ensuremath{\Varid{inid}}/\ensuremath{\Varid{outid}} e definição do isomorfimo \ensuremath{\mathbf{in}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}}}}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{bestAreas}\comp (\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init})})\comp \Varid{outid}}
 \just\equiv{Absorção-x, funtor-+}
-\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{bestAreas}))\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\mathbf{in}\comp (\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{bestAreas}))\comp (\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{outid}}
 \just\equiv{Universal-ana}
-\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}}}
+\ensuremath{\Varid{bestAreas}\mathrel{=}\ana{(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{outid}}}
 \qed
 \end{eqnarray*}
 
@@ -1085,15 +1076,15 @@ Portanto, temos
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{mostwater}\mathrel{=}\llbracket\, \Varid{conquer},\,\Varid{divide}\,\rrbracket{}\<[E]%
 \\
-\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \mathsf{out}_{id}{}\<[E]%
+\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}\mathbin{+}\conj{\Varid{area}}{\Varid{cond}\;(\uncurry{(\mathbin{<})}\comp \conj{\Varid{head}}{\Varid{last}})\;\Varid{tail}\;\Varid{init}})\comp \Varid{outid}{}\<[E]%
 \\
 \>[B]{}\Varid{conquer}\mathrel{=}\alt{\Varid{zero}}{\uncurry{\Varid{max}}\comp (\Varid{fromIntegral}\times\Varid{fromIntegral})}{}\<[E]%
 \\
 \>[B]{}\Varid{area}\;\Varid{l}\mathrel{=}(\Varid{min}\;(\Varid{head}\;\Varid{l})\;(\Varid{last}\;\Varid{l}))\mathbin{*}((\length \;\Varid{l})\mathbin{-}\mathrm{1}){}\<[E]%
 \\
-\>[B]{}\mathsf{out}_{id}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}i_1\;(){}\<[E]%
+\>[B]{}\Varid{outid}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}i_1\;(){}\<[E]%
 \\
-\>[B]{}\mathsf{out}_{id}\;(\Varid{h}\mathbin{:}\Varid{t})\mathrel{=}i_2\;(\Varid{h}\mathbin{:}\Varid{t}){}\<[E]%
+\>[B]{}\Varid{outid}\;(\Varid{h}\mathbin{:}\Varid{t})\mathrel{=}i_2\;(\Varid{h}\mathbin{:}\Varid{t}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -1103,7 +1094,7 @@ Com diagrama final
 \xymatrix{
     \ensuremath{{\N_0}^{*}}
            \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
-           \ar[r]_-{\ensuremath{\mathsf{out}_{id}}}
+           \ar[r]_-{\ensuremath{\Varid{outid}}}
 &
     \ensuremath{\mathrm{1}\mathbin{+}(\N_0\times{\N_0}^{*})}
            \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{divide})}}
@@ -1122,7 +1113,6 @@ Com diagrama final
 }
 \end{eqnarray*}
 
->>>>>>> 9358f80f35f19bb2905d715ccb834beb4ac48798
 \subsection*{Problema 2}
 
 Para este problema, iremos primeiro definir o mapAccumR, mapAccumL e o filter com catamorfismos.
